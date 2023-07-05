@@ -2,22 +2,12 @@
 import Link from "next/link";
 import "./Nav.css";
 import { useEffect, useState } from "react";
+import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 
 export default function Header() {
-  let [size, setSize] = useState(window.innerWidth);
+  const {width, height} = useWindowDimensions();
   let [toggleMenu, setToggleMenu] = useState(false);
 
-
-  useEffect(() => {
-    function uploadSize() {
-      setSize(window.outerWidth);
-    }
-
-    window.addEventListener("resize", uploadSize);
-    return () => {
-      window.removeEventListener("resize", uploadSize);
-    };
-  }, []);
 
 
   return (
@@ -29,7 +19,7 @@ export default function Header() {
           className="logo"
         />
       </div>
-      {size >= 800 ? (
+      {width >= 800 ? (
         <div className="right-container-nav">
           <Link className="link-button-nav" href={"/testimonial"}>
             Testimonial
@@ -83,7 +73,7 @@ export default function Header() {
         </div>
         
         
-      )}{ size < 800 &&
+      )}{ width < 800 &&
                 <div className={toggleMenu ?"toggle-menu-active" : "toggle-menu"}>
           <Link className="link-button-nav" href={"/shop"}>Shop</Link>
           <Link className="link-button-nav" href={"/about"}>About</Link>

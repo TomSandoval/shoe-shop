@@ -4,21 +4,10 @@ import "./page.css";
 import { shoes } from "@/Utils/shoes";
 import HomeCards from "@/components/HomeCards/homeCards";
 import { useEffect, useState } from "react";
+import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 
 export default function page() {
-  let [size, setSize] = useState(innerWidth);
-
-  useEffect(() => {
-    function uploadSize() {
-      setSize(window.outerWidth);
-    }
-
-    window.addEventListener("resize", uploadSize);
-
-    return () => {
-      window.removeEventListener("resize", uploadSize);
-    };
-  }, []);
+  const {width, height} = useWindowDimensions();
 
   return (
     <>
@@ -52,7 +41,7 @@ export default function page() {
               </div>
             </div>
           </div>
-          { size > 800 &&
+          { width > 800 &&
             <div className="image-container">
               <img
                 alt="landing-image"
@@ -62,7 +51,7 @@ export default function page() {
             </div>
           }
         </div>
-        {size >= 1460 ? (
+        {width >= 1460 ? (
           <div className="cards-home-container">
             {shoes.slice(0, 5).map((shoe) => {
               return (
