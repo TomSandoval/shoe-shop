@@ -1,95 +1,100 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Link from "next/link";
+import "./page.css";
+import { shoes } from "@/Utils/shoes";
+import HomeCards from "@/components/HomeCards/homeCards";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function page() {
+  let [size, setSize] = useState(innerWidth);
+
+  useEffect(() => {
+    function uploadSize() {
+      setSize(window.outerWidth);
+    }
+
+    window.addEventListener("resize", uploadSize);
+
+    return () => {
+      window.removeEventListener("resize", uploadSize);
+    };
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <section className="section-home-all-container">
+        <div className="landing-welcome">
+          <div className="information-container">
+            <div>
+              <h1 className="principal-text">
+                Days can't start with out perfect
+                <span className="principal-text-green"> shoes</span>
+              </h1>
+              <h4 className="secondary-text">
+                Find the best shoes at the best price
+              </h4>
+              <div className="buttons-container">
+                <Link href={"/shop"} className="button-green">
+                  Shop Now!
+                </Link>
+                <Link href={"/about"} className="button-learn-more">
+                  Learn More{" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="34"
+                    height="34"
+                    viewBox="0 0 24 24"
+                    style={{ fill: "rgba(0, 0, 0, 1)" }}
+                  >
+                    <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+          { size > 800 &&
+            <div className="image-container">
+              <img
+                alt="landing-image"
+                className="landing-image"
+                src="/assets/shoe-shop-image.png"
+              />
+            </div>
+          }
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        {size >= 1460 ? (
+          <div className="cards-home-container">
+            {shoes.slice(0, 5).map((shoe) => {
+              return (
+                <HomeCards
+                  id={shoe.id}
+                  name={shoe.name}
+                  price={shoe.price}
+                  img={shoe.imageURL}
+                  key={shoe.id}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className="cards-home-container">
+            {shoes.slice(0, 4).map((shoe) => {
+              return (
+                <HomeCards
+                  id={shoe.id}
+                  name={shoe.name}
+                  price={shoe.price}
+                  img={shoe.imageURL}
+                  key={shoe.id}
+                />
+              );
+            })}
+          </div>
+        )}
+        <Link className="button-products-home" href={"/shop"}>
+          View all products
+        </Link>
+      </section>
+    </>
+  );
 }

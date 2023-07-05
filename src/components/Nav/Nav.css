@@ -1,0 +1,131 @@
+.nav-all-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    align-items: center;
+    height: 80px;
+    position: fixed;
+    width: 100vw;
+    background-color: #F6F6F6;
+}
+
+
+.left-container-nav {
+    padding-left: 18px;
+}
+
+.logo {
+    width: 220px;
+}
+
+
+.right-container-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    font-family: "Poppins";
+    padding-right: 18px;
+}
+
+.link-button-nav {
+    text-decoration: none;
+    color: #000;
+    border-bottom: 2px solid #80ED99;
+    font-size: 1.3em;
+}
+
+.link-button-nav-green {
+    color: #000;
+    text-decoration: none;
+    background-color: #80ED99;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-family: "Poppins";
+    font-size: 1.3em;
+    box-shadow: 0px 5px 4px 0px rgba(128, 237, 153, 0.56);
+    transition: box-shadow .3s;
+}
+
+.link-button-nav-green:hover {
+    box-shadow: 0px 0px 10px 5px rgba(128, 237, 153, 0.65);
+}
+
+.button-cart-nav {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-menu {
+    display: none;
+}
+
+
+
+@media only screen and (max-width:800px) {
+
+
+    .logo {
+        width: 130px;
+    }
+
+    .bar-menu-container, .bar-menu-container-active {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding-right: 18px;
+    }
+
+    .bar-menu-container-active .bar-menu:nth-child(1) {
+        transform: rotate(45deg) translate(10px, 4px);
+    }
+
+    .bar-menu-container-active .bar-menu:nth-child(2) {
+        opacity: 0;
+      }
+
+    .bar-menu-container-active .bar-menu:nth-child(3) {
+        transform: rotate(-45deg) translate(10px, -5px);
+    }
+
+    .bar-menu {
+        display: inline-block;
+        width: 30px;
+        height: 2px;
+        background-color: #80ED99;
+        transition: all .3s;
+    }
+    
+    .toggle-menu, .toggle-menu-active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        max-width: 100vw;
+        width: calc(100%);
+        transition: all .5s ease-in-out;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .toggle-menu {
+        top: -200%;
+    }
+
+    .toggle-menu-active {
+        top: 80px;
+        background-color: transparent;
+    }
+}
+
+
+
+
+
+@font-face {
+    font-family: "Poppins";
+    src: url(/public/fonts/Poppins-Regular.ttf);
+}

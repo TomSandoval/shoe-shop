@@ -1,0 +1,80 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid #80ED99;
+    border-radius: 20px;
+    padding: 8px 16px;
+    width: 230px;
+    height: 320px;
+    box-shadow: 0px 0px 5px 5px #80ed998f;
+    transition: .3s;
+}
+
+.card-container:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 0px 8px 8px #6deb8a8f;
+}
+
+
+.card-image {
+    max-width: 130px;   
+}
+
+.hr-card {
+    width: 80%;
+    height: 2px;
+    background-color: #eee;
+    margin-bottom: 12px;
+}
+
+.card-name {
+    text-align: center; 
+    font-family: "Poppins";
+    padding: 12px;
+    font-size: 1.1em;
+}
+
+.card-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 20%;
+}
+
+.card-price {
+    font-family: "Poppins";
+    color: #569e66;
+}
+
+.card-cart-button {
+    background-color: #80ED99;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-family: "Poppins";
+}
+
+
+@media only screen and (max-width:800px) {
+
+    .card-container{
+        width: 150px;
+        height: 250px;  
+    }
+
+    .card-image {
+        max-width: 110px;
+    }
+
+}
+
+
+@font-face {
+    font-family: "Poppins";
+    src: url(../../../public/fonts/Poppins-Regular.ttf);
+}
