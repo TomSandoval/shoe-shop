@@ -71,6 +71,10 @@
         max-width: 110px;
     }
 
+    .card-name {
+        font-size: 14px;
+    }
+
 }
 
 
