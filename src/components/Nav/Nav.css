@@ -75,9 +75,14 @@
         color: #000;
         text-decoration: none;
         font-family: "Poppins";
-        padding-right: 16px;
+        margin-right: 16px;
         font-size: 14px;
     }
+
+    .link-button-nav-default:nth-child(2) {
+        border-bottom: 2px solid #80ED99; 
+    } 
+
 
     .bar-menu-container, .bar-menu-container-active {
         display: flex;
