@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 
 export default function Header() {
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   let [toggleMenu, setToggleMenu] = useState(false);
-
-
 
   return (
     <nav className="nav-all-container">
@@ -51,13 +49,33 @@ export default function Header() {
           </button>
         </div>
       ) : (
-        <div style={{display: "flex", justifyContent:"center",alignItems:"center", paddingRight: "18px"}}>
-          <div onClick={()=> setToggleMenu(!toggleMenu)} className={toggleMenu === false ? "bar-menu-container" : "bar-menu-container-active"}>
-          <span className="bar-menu"></span>
-          <span className="bar-menu"></span>
-          <span className="bar-menu"></span>
-        </div>
-        <button className="button-cart-nav">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingRight: "16px",
+          }}
+        >
+          <Link className="link-button-nav-default" href={"/login"}>
+            Sign In
+          </Link>
+          <Link className="link-button-nav-default" href={"/register"}>
+            Sign Up
+          </Link>
+          <div
+            onClick={() => setToggleMenu(!toggleMenu)}
+            className={
+              toggleMenu === false
+                ? "bar-menu-container"
+                : "bar-menu-container-active"
+            }
+          >
+            <span className="bar-menu"></span>
+            <span className="bar-menu"></span>
+            <span className="bar-menu"></span>
+          </div>
+          <button className="button-cart-nav">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="28"
@@ -71,16 +89,22 @@ export default function Header() {
             </svg>
           </button>
         </div>
-        
-        
-      )}{ width < 800 &&
-                <div className={toggleMenu ?"toggle-menu-active" : "toggle-menu"}>
-          <Link className="link-button-nav" href={"/shop"}>Shop</Link>
-          <Link className="link-button-nav" href={"/about"}>About</Link>
-          <Link className="link-button-nav" href={"/testimonial"}>Testimonial</Link>
+      )}
+      {width < 800 && (
+        <div className={toggleMenu ? "toggle-menu-active" : "toggle-menu"}>
+          <div className="toggle-menu-container">
+            <Link className="link-button-nav" href={"/shop"}>
+              Shop
+            </Link>
+            <Link className="link-button-nav" href={"/about"}>
+              About
+            </Link>
+            <Link className="link-button-nav" href={"/testimonial"}>
+              Testimonial
+            </Link>
+          </div>
         </div>
-      }
-
+      )}
     </nav>
   );
 }

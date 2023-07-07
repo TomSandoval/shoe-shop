@@ -68,7 +68,15 @@
 
 
     .logo {
-        width: 130px;
+        width: 120px;
+    }
+
+    .link-button-nav-default {
+        color: #000;
+        text-decoration: none;
+        font-family: "Poppins";
+        padding-right: 16px;
+        font-size: 14px;
     }
 
     .bar-menu-container, .bar-menu-container-active {
@@ -76,12 +84,13 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 8px;
-        padding-right: 18px;
+        gap: 6px;
+        padding-right: 16px;
+        width: 22px;
     }
 
     .bar-menu-container-active .bar-menu:nth-child(1) {
-        transform: rotate(45deg) translate(10px, 4px);
+        transform: rotate(45deg) translate(4px, 4px);
     }
 
     .bar-menu-container-active .bar-menu:nth-child(2) {
@@ -89,12 +98,12 @@
       }
 
     .bar-menu-container-active .bar-menu:nth-child(3) {
-        transform: rotate(-45deg) translate(10px, -5px);
+        transform: rotate(-45deg) translate(8px, -7px);
     }
 
     .bar-menu {
         display: inline-block;
-        width: 30px;
+        width:  100%;
         height: 2px;
         background-color: #80ED99;
         transition: all .3s;
@@ -102,14 +111,13 @@
     
     .toggle-menu, .toggle-menu-active {
         display: flex;
-        justify-content: center;
         align-items: center;
         position: absolute;
         max-width: 100vw;
         width: calc(100%);
         transition: all .6s ease-in-out;
         flex-direction: column;
-        gap: 20px;
+        padding-top: 20px;
         background-color: #F6F6F6;
     }
 
@@ -118,11 +126,23 @@
         height: 100vh;
     }
 
+    
     .toggle-menu-active {
         top: 80px;
         background-color: #F6F6F6;
         height: 100vh;
+        z-index: 100;
     }
+    .toggle-menu-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+
+
 }
 
 
