@@ -5,12 +5,55 @@ export const shoes = [
     brand: "NIKE",
     gender: "MEN",
     category: "RUNNING",
-    price: 160,
-    is_in_inventory: true,
-    items_left: 3,
-    imageURL:
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil rem inventore est. Expedita animi laudantium beatae, adipisci soluta odio veniam ut voluptatibus magni unde, nemo, voluptate dolore? Tenetur, delectus porro?",
+    in_stock: true,
+    stock: 2,
+    images: [
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-665455a5-45de-40fb-945f-c1852b82400d/react-infinity-run-flyknit-mens-running-shoe-zX42Nc.jpg",
+    ],
     slug: "nike-react-infinity-run-flyknit",
+    in_discount: true,
+    original_price: 180,
+    discount_price: 120,
+    have_varations: true,
+    variations: [
+      {
+        name: "Grey",
+        color: "rgb(141,141,141)",
+        images: [
+          "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-665455a5-45de-40fb-945f-c1852b82400d/react-infinity-run-flyknit-mens-running-shoe-zX42Nc.jpg",
+          "https://sportline.vtexassets.com/arquivos/ids/697198-1152-2048?v=638024844591630000&width=1152&height=2048&aspect=true",
+        ],
+        size: [
+          { size: 4, stock: 1 },
+          { size: 5, stock: 0 },
+          { size: 11, stock: 0 },
+        ],
+        in_stock: true,
+      },
+      {
+        name: "Black",
+        color: "rgb(0,0,0)",
+        images: [
+          "https://nikearprod.vtexassets.com/arquivos/ids/407766/DH5392_001_A_PREM.jpg?v=638143134292370000",
+          "https://nikearprod.vtexassets.com/arquivos/ids/415128/DH5392_001_F_PREM.jpg?v=638143268687300000",
+        ],
+        size: [
+          { size: 6, stock: 0 },
+          { size: 7, stock: 0 },
+          { size: 8, stock: 4 },
+        ],
+        in_stock: true,
+      },
+    ],
+    size: [5, 8, 11.4],
+    features: ["Skibi", "Skibiribi"],
+    material: "Mesh",
+    color: {
+      name: "Grey",
+      color: "rgb(141,141,141)",
+    },
   },
   {
     id: 2,
@@ -24,6 +67,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-5cc7de3b-2afc-49c2-a1e4-0508997d09e6/react-miler-mens-running-shoe-DgF6nr.jpg",
     slug: "nike-react-miler",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 3,
@@ -37,6 +82,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-33b0a0a5-c171-46cc-ad20-04a768703e47/air-zoom-pegasus-37-womens-running-shoe-Jl0bDf.jpg",
     slug: "nike-air-zoom-pegasus-37",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 4,
@@ -50,6 +97,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/99a7d3cb-e40c-4474-91c2-0f2e6d231fd2/joyride-run-flyknit-womens-running-shoe-HcfnJd.jpg",
     slug: "nike-joyride-run-flyknit",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 5,
@@ -63,6 +112,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/9dda6202-e2ff-4711-9a09-0fcb7d90c164/mercurial-vapor-13-elite-fg-firm-ground-soccer-cleat-14MsF2.jpg",
     slug: "nike-mercurial-vapor-13-elite-fg",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 6,
@@ -76,6 +127,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/s1amp7uosrn0nqpsxeue/phantom-vision-elite-dynamic-fit-fg-firm-ground-soccer-cleat-19Kv1V.jpg",
     slug: "nike-phantom-vision-elite-dynamic-fit-fg",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 7,
@@ -89,6 +142,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/whegph8z9ornhxklc8rp/phantom-venom-academy-fg-firm-ground-soccer-cleat-6JVNll.jpg",
     slug: "nike-phantom-venom-academy-fg",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 8,
@@ -102,6 +157,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/vhbwnkor8sxt8qtecgia/mercurial-vapor-13-elite-tech-craft-fg-firm-ground-soccer-cleat-l38JPj.jpg",
     slug: "nike-mercurial-vapor-13-elite-tech-craft-fg",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 9,
@@ -128,6 +185,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/178b2a46-3ee4-492b-882e-f71efdd53a36/air-force-1-big-kids-shoe-2zqp8D.jpg",
     slug: "nike-air-force-1",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 11,
@@ -154,6 +213,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-620aeb37-1b28-44b0-9b14-5572f8cbc948/air-max-90-ltr-big-kids-shoe-hdNLQ5.jpg",
     slug: "nike-air-max-90-ltr",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 13,
@@ -167,6 +228,8 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/33888130-0320-41a1-ba53-a026decd8aa2/joyride-dual-run-big-kids-running-shoe-1HDJF8.jpg",
     slug: "nike-joyride-dual-run",
+    original_price: 150,
+    discount_price: 100
   },
   {
     id: 14,
@@ -180,5 +243,7 @@ export const shoes = [
     imageURL:
       "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-73e54c0b-11a6-478b-9f90-bd97fcde872d/renew-run-big-kids-running-shoe-5Bpz93.jpg",
     slug: "nike-renew-run",
+    original_price: 150,
+    discount_price: 100
   },
 ];

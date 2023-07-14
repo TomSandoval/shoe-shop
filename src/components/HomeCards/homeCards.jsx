@@ -1,5 +1,6 @@
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import "./homeCards.css";
+import Link from "next/link";
 
 
 export default function HomeCards({id,name,price,img}) {
@@ -9,7 +10,9 @@ export default function HomeCards({id,name,price,img}) {
     return (
         <div className="card-container">
             <div className="card-image-container">
+                <Link href={`/detail/${id}`}>
                 <img className="card-image" src={img} alt={name}/>
+                </Link>
             </div>
             <div className="hr-card"></div>
             <div style={{width: "100%"}}>   
