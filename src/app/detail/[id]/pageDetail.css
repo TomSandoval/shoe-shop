@@ -296,6 +296,8 @@
   .detail-images-container {
     width: auto;
     flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
   }
 
   .detail-principal-information-box {
@@ -346,6 +348,14 @@
     font-size: 18px;
   }
 
+  select {
+    font-size: 18px !important;
+  }
+
+  .line-old-price-product {
+    top: 40%;
+  }
+
   .price-product {
     font-size: 22px;
   }
@@ -354,13 +364,24 @@
     font-size: 22px;
   }
 
-  .information-box-buttons {
-    font-size: 18px;
+  .buttons-container {
     padding: 0;
+    gap: 20px;
+  }
+
+  .information-box-buttons, .information-box-buttons-dissable {
+    font-size: 16px;
+    padding: 4px 10px;
   }
 
   .cards-on-sale-container {
     overflow: hidden;
+    overflow-x: auto;
+  }
+
+  .variations-container {
+    margin-top: 16px;
+    margin-bottom: 16px;
   }
 }
 

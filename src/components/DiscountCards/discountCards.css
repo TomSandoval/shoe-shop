@@ -65,6 +65,27 @@
 }
 
 
+@media only screen and (max-width: 800px) {
+    
+    .discount-card {
+        width: 140px;
+        height: 230px;
+        margin: 20px;
+    }
+
+    .discount-card-image {
+        max-width: 80px;
+    }
+
+    .discount-price {
+        font-size: 20px;
+    }
+
+    .original-price {
+        font-size: 18px;
+    }
+}
+
 @font-face {
     font-family: "Poppins";
     src: url(/public//fonts/Poppins-Bold.ttf);
