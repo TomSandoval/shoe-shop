@@ -5,6 +5,7 @@ import { shoes } from "@/Utils/shoes";
 import HomeCards from "@/components/HomeCards/homeCards";
 import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
+import Shoe3D from "@/components/shoe3D/shoe3D";
 
 export default function page() {
   const {width, height} = useWindowDimensions();
@@ -22,7 +23,7 @@ export default function page() {
               <h4 className="secondary-text">
                 Find the best shoes at the best price
               </h4>
-              <div className="buttons-container">
+              <div className="buttons-container-home">
                 <Link href={"/shop"} className="button-green">
                   Shop Now!
                 </Link>
@@ -43,11 +44,7 @@ export default function page() {
           </div>
           { width > 800 &&
             <div className="image-container">
-              <img
-                alt="landing-image"
-                className="landing-image"
-                src="/assets/shoe-shop-image.png"
-              />
+              <Shoe3D/>
             </div>
           }
         </div>

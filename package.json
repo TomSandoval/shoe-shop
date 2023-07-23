@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "@uidotdev/usehooks": "^2.0.1",
+    "axios": "^1.4.0",
+    "debug": "^4.3.4",
     "next": "13.4.7",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "supports-color": "^8.1.1",
+    "three": "^0.154.0"
   }
 }

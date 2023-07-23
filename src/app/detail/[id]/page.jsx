@@ -43,6 +43,11 @@ export default function Detail({ params }) {
       setSizeSelected(sizeInStock.size);
       setColorSelected(variationInStock.name);
     } else {
+
+      const sizeInStock = data[0].size.find(s => s.stock > 0);
+
+
+      setSizeSelected(sizeInStock.size)
       setColorSelected(data[0].color.name);
     }
   }, []);
@@ -59,6 +64,11 @@ export default function Detail({ params }) {
 
       shoeSize?.stock <= 0 ? setStock(false) : setStock(true);
       
+    } else {
+      const sizeFound = shoe?.size.find(s => s.size == sizeSelected);
+      console.log(sizeFound);
+
+      sizeFound?.stock > 0 ? setStock(true) : setStock(false)
     }
 
 
@@ -78,7 +88,6 @@ export default function Detail({ params }) {
     brand,
     gender,
     in_stock,
-    stock,
     category,
     have_varations,
     in_discount,
@@ -109,7 +118,7 @@ export default function Detail({ params }) {
       return images.map((i, index) => (
         <img
           onClick={() => setSelectedImage(index)}
-          className="image-option"
+          className={index === selectedImage ? "image-option-selected" : "image-option"}
           src={i}
           alt={name}
           key={index}
@@ -134,7 +143,7 @@ export default function Detail({ params }) {
 
   const handlePrincipalImage = () => {
     if (!have_varations) {
-      return <img src={images[0]} alt={name} />;
+      return <img src={images[selectedImage]} alt={name} />;
     } else {
       if (colorSelected) {
         const variationFound = variations.find((v) => v.name === colorSelected);
@@ -153,8 +162,8 @@ export default function Detail({ params }) {
   const handleSize = () => {
     if (!have_varations) {
       return size.map((s, index) => (
-        <option value={s} key={index}>
-          {s}
+        <option value={s.size} key={index}>
+          {s.size}
         </option>
       ));
     } else {
@@ -175,18 +184,22 @@ export default function Detail({ params }) {
 
   const handleStock = () => {
     if (!have_varations) {
-      if (in_stock) {
+
+      const sizeFound = shoe.size.find(s => s.size == sizeSelected);
+
+      if (sizeFound.stock > 0) {
         return (
           <div style={{ display: "flex", gap: "10px" }}>
-            <h3>Stock: </h3> <h3 className="stock-product">{stock}</h3>
+            <h3>Stock: </h3> <h3 className="stock-product">{sizeFound.stock}</h3>
           </div>
         );
       } else {
 
         return (
+
           <div style={{ display: "flex" }}>
             <h3>Stock: </h3>
-            <h3 className="no-stock-error">No Stock</h3>
+            <h3 className="no-stock-error"> No Stock</h3>
           </div>
         );
       }

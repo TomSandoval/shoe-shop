@@ -1,4 +1,8 @@
-.nav-all-container {
+html {
+    background-color: #F6F6F6;
+}
+
+.nav-all-container, .nav-all-container-color {
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -6,10 +10,14 @@
     height: 80px;
     position: fixed;
     width: 100vw;
-    background-color: #F6F6F6;
     z-index: 1000;
+    transition: 0.3s;
 }
 
+.nav-all-container-color {
+    box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.20);
+    background-color: #F6F6F6;
+}
 
 .left-container-nav {
     padding-left: 18px;
@@ -26,7 +34,7 @@
     align-items: center;
     gap: 60px;
     font-family: "Poppins";
-    padding-right: 18px;
+    padding-right: 32px;
 }
 
 .link-button-nav {

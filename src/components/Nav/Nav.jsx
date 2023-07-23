@@ -7,15 +7,32 @@ import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 export default function Header() {
   const { width, height } = useWindowDimensions();
   let [toggleMenu, setToggleMenu] = useState(false);
+  const [color, setColor] = useState(false);
+
+
+  useEffect(()=>{
+    const colorNav = () => {
+      if (window.scrollY >=80) {
+        setColor(true)
+      } else {
+        setColor(false)
+      }
+    }
+
+    window.addEventListener("scroll", colorNav)
+
+  },[color])
 
   return (
-    <nav className="nav-all-container">
+    <nav className={color ? "nav-all-container-color" : "nav-all-container"}>
       <div className="left-container-nav">
-        <img
-          src="/assets/Shoes-shop-logo.webp"
-          alt="shoe shop logo"
-          className="logo"
-        />
+        <Link href={'/'}>
+          <img
+            src="/assets/Shoes-shop-logo.webp"
+            alt="shoe shop logo"
+            className="logo"
+          />
+        </Link>
       </div>
       {width >= 800 ? (
         <div className="right-container-nav">

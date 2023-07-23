@@ -6,10 +6,10 @@
     border: 2px solid #80ED99;
     border-radius: 20px;
     padding: 8px 16px;
-    width: 230px;
-    height: 320px;
+    width: 200px;
+    height: 290px;
     box-shadow: 0px 0px 5px 5px #80ed998f;
-    transition: .3s;
+    transition: transform .3s;
 }
 
 .card-container:hover {
@@ -47,6 +47,7 @@
 .card-price {
     font-family: "Poppins";
     color: #569e66;
+    font-size: 20px;
 }
 
 .card-cart-button {
