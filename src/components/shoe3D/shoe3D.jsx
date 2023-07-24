@@ -24,9 +24,9 @@ export default function Shoe3D() {
     const scene = new THREE.Scene();
     scene.background = null;
     const camera = new THREE.PerspectiveCamera(25, width / height, 0.1, 100);
+    camera.position.set(0, 0, 0); 
     camera.zoom = 1.2;
     scene.add(camera);
-    camera.position.set(0, 0, 0);
 
     camera.lookAt(new THREE.Vector3());
 

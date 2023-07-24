@@ -1,13 +1,10 @@
-"use client";
 import "./pageShop.css";
 import axios from "axios";
 import shoeSale from "../../../public/assets/Shoe-sale.png";
-import { useState } from "react";
+import { shoes } from "@/Utils/shoes";
+import CardShop from "@/components/CardsShop/CardShop";
 
 export default function Shop() {
-
-
-
   const handleFile = async (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -19,8 +16,7 @@ export default function Shop() {
     );
     const file = await res.data;
     console.log(file);
-  }
-
+  };
 
   return (
     <main>
@@ -67,7 +63,7 @@ export default function Shop() {
           </button>
 
           <input
-          autoComplete="off"
+            autoComplete="off"
             className="input-search"
             type="text"
             name="search"
@@ -85,7 +81,16 @@ export default function Shop() {
           </select>
         </div>
       </div>
-      <input type="file" onChange={handleFile}/>
+      <section className="principal-section-shop">
+        <div className="filters-panel-shop">
+          <h4>Filters</h4>
+        </div>
+        <div className="products-panel-shop">
+          <div className="products-cards-container-shop">
+              {shoes.slice(0,9).map(s => <CardShop name={s.name} img={s.images[0] || s.variations[0].images[0]} brand={s.brand} price={s.in_discount ? s.discount_price : s.original_price} variations={s.variations.length} backgroundColor={s.background_card} id={s.id}/>)}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

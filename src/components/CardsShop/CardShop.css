@@ -1,0 +1,58 @@
+* {
+    text-decoration: none;
+    margin: 0;
+}
+
+
+.card-shop-all-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.img-container-card-shop {
+    height: 240px;
+    width: 270px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.img-card-shop {
+    max-width: 230px;
+    filter: drop-shadow(0px 10px 4px #0007)
+}
+
+.principal-information-card-shop, .secondary-information-card-shop {
+    display: flex;
+    font-family: "Roboto";
+    margin-top: 12px;
+    justify-content: space-between;
+    width: 270px;
+}
+
+.principal-information-card-shop h2 {
+    font-size: 18px;
+}
+
+.name-container h2, .price-container h2 {
+    color: #000;
+    
+}
+
+
+.brand-container h4, .variations-container h4 {
+    color: #585858
+}
+
+
+
+
+@font-face {
+    font-family: "Roboto";
+    src: url(../../../public/fonts/Roboto-Medium.ttf);
+}

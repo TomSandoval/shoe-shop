@@ -10,7 +10,7 @@ export const shoes = [
     in_stock: true,
     stock: 2,
     images: [
-      "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-665455a5-45de-40fb-945f-c1852b82400d/react-infinity-run-flyknit-mens-running-shoe-zX42Nc.jpg",
+      "https://res.cloudinary.com/dycpuotwh/image/upload/v1690219670/shoe-shop/i1-665455a5-45de-40fb-945f-c1852b82400d-removebg-preview_vdam6o.png",
     ],
     slug: "nike-react-infinity-run-flyknit",
     in_discount: true,
@@ -54,6 +54,7 @@ export const shoes = [
       name: "Grey",
       color: "rgb(141,141,141)",
     },
+    background_card: "#4082D0"
   },
   {
     id: 2,
@@ -82,6 +83,7 @@ export const shoes = [
       name: "Green",
       color: "rgb(16, 122, 126)",
     },
+    background_card: "#E57D7D"
   },
   {
     id: 3,
@@ -133,6 +135,7 @@ export const shoes = [
     features: ["limited edition", "Running"],
     material: "Mesh",
     color: {},
+    background_card: "#EDDB36"
   },
   {
     id: 4,
@@ -187,6 +190,7 @@ export const shoes = [
       name: "Grey",
       color: "rgb(141,141,141)",
     },
+    background_card: "#FDB851"
   },
   {
     id: 5,
@@ -215,6 +219,7 @@ export const shoes = [
       name: "Beige",
       color: "rgb(204, 193, 183)",
     },
+    background_card: "#A151F0"
   },
   {
     id: 6,
@@ -269,6 +274,7 @@ export const shoes = [
       name: "Grey",
       color: "rgb(141,141,141)",
     },
+    background_card: "#56D1CA"
   },
   {
     id: 7,
@@ -320,6 +326,7 @@ export const shoes = [
     features: ["Running", "Light"],
     material: "Mesh",
     color: {},
+    background_card: "#95F585"
   },
   {
     id: 8,
@@ -356,8 +363,8 @@ export const shoes = [
         name: "Black",
         color: "rgb(0,0,0)",
         images: [
-          "https://nikearprod.vtexassets.com/arquivos/ids/407766/DH5392_001_A_PREM.jpg?v=638143134292370000",
-          "https://nikearprod.vtexassets.com/arquivos/ids/415128/DH5392_001_F_PREM.jpg?v=638143268687300000",
+          "https://res.cloudinary.com/dycpuotwh/image/upload/v1690160228/shoe-shop/bad8c77597b448adbc52af3800d5ccbd_9366-removebg-preview_xfz9z6.png",
+          "https://res.cloudinary.com/dycpuotwh/image/upload/v1690160471/shoe-shop/Zapatillas_de_Running_Alphabounce_Sustainable_Bounce_Negro_HP6149_02_standard-removebg-preview_nuoqed.png",
         ],
         size: [
           { size: 6, stock: 0 },
@@ -374,62 +381,35 @@ export const shoes = [
       name: "Grey",
       color: "rgb(141,141,141)",
     },
+    background_card: "#FFB039"
   },
   {
     id: 9,
-    name: "Nike React Infinity Run Flyknit",
-    brand: "NIKE",
+    name: "XC-72",
+    brand: "NEW BALANCE",
     gender: "MEN",
-    category: "RUNNING",
+    category: "LIFESTYLE",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil rem inventore est. Expedita animi laudantium beatae, adipisci soluta odio veniam ut voluptatibus magni unde, nemo, voluptate dolore? Tenetur, delectus porro?",
     in_stock: true,
-    stock: 2,
     images: [
-      "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-665455a5-45de-40fb-945f-c1852b82400d/react-infinity-run-flyknit-mens-running-shoe-zX42Nc.jpg",
+      "https://res.cloudinary.com/dycpuotwh/image/upload/v1690170644/shoe-shop/zapatillas-unisex-new-balance-xc-72-uxc72rb_nb_02_i_3-removebg-preview_hyqnsy.png",
+      "https://res.cloudinary.com/dycpuotwh/image/upload/v1690170677/shoe-shop/zapatillas-unisex-new-balance-xc-72-uxc72rb_nb_04_i_3-removebg-preview_josnph.png"
     ],
-    slug: "nike-react-infinity-run-flyknit",
-    in_discount: true,
-    original_price: 180,
-    discount_price: 120,
-    have_varations: true,
-    variations: [
-      {
-        name: "Grey",
-        color: "rgb(141,141,141)",
-        images: [
-          "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-665455a5-45de-40fb-945f-c1852b82400d/react-infinity-run-flyknit-mens-running-shoe-zX42Nc.jpg",
-          "https://sportline.vtexassets.com/arquivos/ids/697198-1152-2048?v=638024844591630000&width=1152&height=2048&aspect=true",
-        ],
-        size: [
-          { size: 4, stock: 1 },
-          { size: 5, stock: 0 },
-          { size: 11, stock: 0 },
-        ],
-        in_stock: true,
-      },
-      {
-        name: "Black",
-        color: "rgb(0,0,0)",
-        images: [
-          "https://nikearprod.vtexassets.com/arquivos/ids/407766/DH5392_001_A_PREM.jpg?v=638143134292370000",
-          "https://nikearprod.vtexassets.com/arquivos/ids/415128/DH5392_001_F_PREM.jpg?v=638143268687300000",
-        ],
-        size: [
-          { size: 6, stock: 0 },
-          { size: 7, stock: 0 },
-          { size: 8, stock: 4 },
-        ],
-        in_stock: true,
-      },
-    ],
-    size: [5, 8, 11.4],
+    slug: "new-balance-xc-72",
+    in_discount: false,
+    original_price: 99,
+    discount_price: undefined,
+    have_varations: false,
+    variations: [],
+    size: [{size: 10.5, stock: 4},{size:8, stock: 3}],
     features: ["Skibi", "Skibiribi"],
     material: "Mesh",
     color: {
-      name: "Grey",
-      color: "rgb(141,141,141)",
+      name: "White",
+      color: "rgb(255,255,255)",
     },
+    background_card: "#56D1CA"
   },
   {
     id: 10,
