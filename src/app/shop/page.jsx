@@ -1,10 +1,22 @@
+"use client";
+
 import "./pageShop.css";
 import axios from "axios";
 import shoeSale from "../../../public/assets/Shoe-sale.png";
 import { shoes } from "@/Utils/shoes";
 import CardShop from "@/components/CardsShop/CardShop";
+import { getAllVariations } from "@/Utils/getAllVariations";
+import { getAllCategories } from "@/Utils/getAllCategories";
+import Link from "next/link";
+import Pagination from "@/components/Pagination/Pagination";
+import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 
 export default function Shop() {
+  const { width, height } = useWindowDimensions();
+
+  const variations = getAllVariations();
+  const categories = getAllCategories();
+
   const handleFile = async (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -82,13 +94,79 @@ export default function Shop() {
         </div>
       </div>
       <section className="principal-section-shop">
-        <div className="filters-panel-shop">
-          <h4>Filters</h4>
-        </div>
+        {width > 800 && (
+          <div className="filters-panel-shop">
+            <div className="sticky-panel-filter">
+              <div className="category-filters-shop">
+                <h3>CATEGORIES</h3>
+                <div>
+                  {categories.map((c, index) => (
+                    <Link
+                      key={index}
+                      className="categories-link-filter"
+                      href={`/categories/${c}`}
+                    >
+                      {c}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="price-filter-shop">
+                <h3>FILTER</h3>
+                <div>
+                  <input
+                    placeholder="Min"
+                    className="filter-price-inputs"
+                    type="number"
+                    name="min-price"
+                  />
+                  <input
+                    placeholder="Max"
+                    className="filter-price-inputs"
+                    type="number"
+                    name="max-price"
+                  />
+                  <button className="filter-price-button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      style={{ fill: "rgba(0, 0, 0, 1)" }}
+                    >
+                      <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="variations-filter-shop">
+                <h3>COLOURS</h3>
+                <div className="variations-colors-container-shop">
+                  {variations.map((c, index) => (
+                    <div key={index} style={{ backgroundColor: c.color }}></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="products-panel-shop">
           <div className="products-cards-container-shop">
-              {shoes.slice(0,9).map(s => <CardShop name={s.name} img={s.images[0] || s.variations[0].images[0]} brand={s.brand} price={s.in_discount ? s.discount_price : s.original_price} variations={s.variations.length} backgroundColor={s.background_card} id={s.id}/>)}
+            {shoes.slice(0, 9).map((s) => (
+              <CardShop
+                key={s.id}
+                width={width}
+                name={s.name}
+                img={s.images[0] || s.variations[0].images[0]}
+                brand={s.brand}
+                price={s.in_discount ? s.discount_price : s.original_price}
+                variations={s.variations.length}
+                backgroundColor={s.background_card}
+                id={s.id}
+              />
+            ))}
           </div>
+          <Pagination />
         </div>
       </section>
     </main>

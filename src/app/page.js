@@ -6,6 +6,7 @@ import HomeCards from "@/components/HomeCards/homeCards";
 import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import Shoe3D from "@/components/shoe3D/shoe3D";
+import CardShop from "@/components/CardsShop/CardShop";
 
 export default function page() {
   const {width, height} = useWindowDimensions();
@@ -52,11 +53,13 @@ export default function page() {
           <div className="cards-home-container">
             {shoes.slice(0, 5).map((shoe) => {
               return (
-                <HomeCards
+                <CardShop
                   id={shoe.id}
                   name={shoe.name}
-                  price={shoe.price}
-                  img={shoe.imageURL}
+                  price={shoe.original_price}
+                  brand={shoe.brand}
+                  img={shoe.images[0] || shoe.variations[0].images[0]}
+                  backgroundColor={shoe.background_card}
                   key={shoe.id}
                 />
               );
@@ -66,11 +69,13 @@ export default function page() {
           <div className="cards-home-container">
             {shoes.slice(0, 4).map((shoe) => {
               return (
-                <HomeCards
+                <CardShop
                   id={shoe.id}
                   name={shoe.name}
                   price={shoe.price}
-                  img={shoe.imageURL}
+                  img={shoe.images[0] || shoe.variations[0].images[0]}
+                  backgroundColor={shoe.background_card}
+                  brand={shoe.brand}
                   key={shoe.id}
                 />
               );

@@ -226,9 +226,9 @@ export const shoes = [
     name: "Nike Phantom GX Elite",
     brand: "NIKE",
     gender: "MEN",
-    category: "Soccer",
+    category: "SOCCER",
     description:
-      "Obsessed with perfecting your craft? We design Elite cleats for you and the world’s biggest stars to give you high-level quality, because you demand greatness from yourself and your footwear. Made with revolutionary Nike Gripknit, these cleats provide better touch on the ball in an intuitive design that helps enhance your precision both when striking and during close control. This version has a Dynamic Fit collar, which wraps your ankle in soft, stretchy fabric for a secure feel.﻿",
+      "Obsessed with perfecting your craft? We design Elite cleats for you and the world’s biggest stars to give you high-level quality, because you demand greatness from yourself and your footwear. Made with revolutionary Nike Gripknit, these cleats provide better touch on the ball in an intuitive design that helps enhance your precision both when striking and during close control. This version has a Dynamic Fit collar, which wraps your ankle in soft, stretchy fabric for a secure feel.",
     in_stock: true,
     stock: undefined,
     images: [],
@@ -281,7 +281,7 @@ export const shoes = [
     name: "TRAIL RUNNING TRACEFINDER",
     brand: "ADIDAS",
     gender: "MEN",
-    category: "Running",
+    category: "RUNNING",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil rem inventore est. Expedita animi laudantium beatae, adipisci soluta odio veniam ut voluptatibus magni unde, nemo, voluptate dolore? Tenetur, delectus porro?",
     in_stock: true,
