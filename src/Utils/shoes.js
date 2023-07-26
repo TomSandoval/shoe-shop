@@ -386,7 +386,7 @@ export const shoes = [
   {
     id: 9,
     name: "XC-72",
-    brand: "NEW BALANCE",
+    brand: "New Balance",
     gender: "MEN",
     category: "LIFESTYLE",
     description:

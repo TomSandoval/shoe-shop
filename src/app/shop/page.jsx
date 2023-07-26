@@ -10,9 +10,11 @@ import { getAllCategories } from "@/Utils/getAllCategories";
 import Link from "next/link";
 import Pagination from "@/components/Pagination/Pagination";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
+import { useState } from "react";
 
 export default function Shop() {
   const { width, height } = useWindowDimensions();
+  const [filterPanel, setFilterPanel] = useState(false)
 
   const variations = getAllVariations();
   const categories = getAllCategories();
@@ -29,6 +31,12 @@ export default function Shop() {
     const file = await res.data;
     console.log(file);
   };
+
+
+  const handlePanel = () => {
+    setFilterPanel(!filterPanel)
+  }
+
 
   return (
     <main>
@@ -82,6 +90,7 @@ export default function Shop() {
             placeholder="Search"
           />
         </div>
+        { width > 800 ? 
         <div className="filters-options-container">
           <span>Sort By</span>
           <select defaultValue={"default"} name="sort">
@@ -91,12 +100,12 @@ export default function Shop() {
             <option value="price-min">Price min - max</option>
             <option value="price-max">Price max - min</option>
           </select>
-        </div>
+        </div> : <button className="button-filter-show" onClick={handlePanel}>Filters</button>}
       </div>
       <section className="principal-section-shop">
-        {width > 800 && (
-          <div className="filters-panel-shop">
+          <div className={filterPanel === false ? "filters-panel-shop" : "filters-panel-shop-active"}>
             <div className="sticky-panel-filter">
+              <button className="button-filter-hide" onClick={handlePanel}>X</button>
               <div className="category-filters-shop">
                 <h3>CATEGORIES</h3>
                 <div>
@@ -149,7 +158,6 @@ export default function Shop() {
               </div>
             </div>
           </div>
-        )}
         <div className="products-panel-shop">
           <div className="products-cards-container-shop">
             {shoes.slice(0, 9).map((s) => (
