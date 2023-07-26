@@ -313,9 +313,10 @@
 
   .filters-panel-shop .sticky-panel-filter, .filters-panel-shop-active .sticky-panel-filter {
     position: fixed;
-    background-color: #fff;
+    background-color: #f6f6f6;
     height: 100%;
     gap: 80px;
+    top: 80px;
   }
 
   .button-filter-show {
@@ -333,6 +334,7 @@
     background-color: transparent;
     border-radius: 20px;
     font-family: "Sansation Bold";
+    border: 1px solid #000;
   }
 }
 
