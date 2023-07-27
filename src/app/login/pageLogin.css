@@ -165,10 +165,12 @@
 @media only screen and (max-width:800px) {
     .left-section-login{
         width: 100vw;
+        padding: 0;
     }
 
     .inputs-login-container {
         width: 100%;
+        padding-left: 20px;
     }
 
     .email-login-input-container input, .password-login-input-container input {
