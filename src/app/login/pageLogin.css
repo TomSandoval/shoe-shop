@@ -166,6 +166,7 @@
     .left-section-login{
         width: 100vw;
         padding: 0;
+        overflow-x: hidden;
     }
 
     .inputs-login-container {
