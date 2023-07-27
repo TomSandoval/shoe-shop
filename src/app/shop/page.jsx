@@ -11,6 +11,7 @@ import Link from "next/link";
 import Pagination from "@/components/Pagination/Pagination";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import { useState } from "react";
+import Footer from "@/components/Footer/footer";
 
 export default function Shop() {
   const { width, height } = useWindowDimensions();
@@ -105,7 +106,8 @@ export default function Shop() {
       <section className="principal-section-shop">
           <div className={filterPanel === false ? "filters-panel-shop" : "filters-panel-shop-active"}>
             <div className="sticky-panel-filter">
-              <button className="button-filter-hide" onClick={handlePanel}>X</button>
+              { width <= 800 &&
+                <button className="button-filter-hide" onClick={handlePanel}>X</button>}
               <div className="category-filters-shop">
                 <h3>CATEGORIES</h3>
                 <div>
@@ -177,6 +179,7 @@ export default function Shop() {
           <Pagination />
         </div>
       </section>
+      <Footer/> 
     </main>
   );
 }
