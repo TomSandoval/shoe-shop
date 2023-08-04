@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import { useSession, signOut } from "next-auth/react";
 
-export default function Header() {
+export default function Header(props) {
   const { width, height } = useWindowDimensions();
   let [toggleMenu, setToggleMenu] = useState(false);
   const [color, setColor] = useState(false);
@@ -38,7 +38,7 @@ export default function Header() {
         </Link>
       </div>
       {width >= 800 ? (
-        <div className="right-container-nav">
+        <div className={`right-container-nav ${props.font.className}`}>
           <Link className="link-button-nav" href={"/testimonial"}>
             Testimonial
           </Link>
@@ -77,6 +77,8 @@ export default function Header() {
         </div>
       ) : (
         <div
+
+          className={`${props.font.className}`}
           style={{
             display: "flex",
             justifyContent: "center",

@@ -33,7 +33,6 @@ html {
     justify-content: center;
     align-items: center;
     gap: 60px;
-    font-family: "Poppins";
     padding-right: 32px;
 }
 
@@ -57,7 +56,6 @@ html {
     background-color: #80ED99;
     padding: 8px 14px;
     border-radius: 10px;
-    font-family: "Poppins";
     font-size: 1.3em;
     border: none;
     cursor: pointer;

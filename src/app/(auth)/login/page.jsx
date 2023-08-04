@@ -7,6 +7,12 @@ import { getProviders, signIn, useSession } from "next-auth/react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Poppins } from "next/font/google";
+
+
+
+const poppins = Poppins({subsets: ["latin"] ,weight: "400"});
+
 
 export default function Login() {
   const session = useSession();
@@ -69,7 +75,7 @@ export default function Login() {
             <button>Log In</button>
           </div>
         </form>
-          <Link className="not-have-account-link-login" href={'/register'}>
+          <Link className={`not-have-account-link-login  ${poppins.className}`} href={'/register'}>
           You do not have an account? Sign up
           </Link>
         <div className="login-auth-container">

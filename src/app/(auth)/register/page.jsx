@@ -8,19 +8,20 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export default function Register() {
   const router = useRouter();
   const session = useSession();
 
-
-  useEffect(()=> {
-    if (session.status === "authorized" || session.status === "authenticated" ) {
-      router.push("/")
+  useEffect(() => {
+    if (session.status === "authorized" || session.status === "authenticated") {
+      router.push("/");
     }
-  },[session])
-
+  }, [session]);
 
   const { width, height } = useWindowDimensions();
   const [error, setError] = useState();
@@ -63,8 +64,8 @@ export default function Register() {
       formError.email = "Email invalid";
     }
 
-    if(form.password.length === 0) {
-      formError.password = "Password ir required"
+    if (form.password.length === 0) {
+      formError.password = "Password ir required";
     } else {
       if (form.password.length < 5) {
         formError.password = "Very weak password";
@@ -85,29 +86,26 @@ export default function Register() {
 
     const errors = validationFormData(formData);
 
-
     const errorsArray = Object.values(errors);
     const firstNonEmptyValue = errorsArray.find((value) => value !== "");
 
     if (firstNonEmptyValue) {
-      return null
+      return null;
     } else {
       try {
-        const response = await axios.post('http://localhost:3000/api/auth/register', JSON.stringify(formData))
+        const response = await axios.post(
+          "http://localhost:3000/api/auth/register",
+          JSON.stringify(formData)
+        );
 
-
-
-
-        setSucces(response.data)
+        setSucces(response.data);
         setError("");
-        toast.success(response.data)
-        
-        
-        router.push("/login")
+        toast.success(response.data);
 
+        router.push("/login");
       } catch (error) {
         setSucces();
-        setError(error.response.data)
+        setError(error.response.data);
       }
     }
   };
@@ -191,7 +189,7 @@ export default function Register() {
             <button>Register</button>
           </div>
         </form>
-        <Link className="have-account-link-register" href={"/login"}>
+        <Link className={`have-account-link-register ${poppins.className}`} href={"/login"}>
           Do you have account? Sign In
         </Link>
         <div className="login-auth-container">
