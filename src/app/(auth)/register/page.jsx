@@ -113,7 +113,7 @@ export default function Register() {
   };
 
   return (
-    <section className="login-section-all-container">
+    <section className="register-section-all-container">
       <div className="left-section-register">
         <div className="welcome-message-register">
           <h2>Welcome!</h2>
