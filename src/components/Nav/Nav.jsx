@@ -3,30 +3,33 @@ import Link from "next/link";
 import "./Nav.css";
 import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const { width, height } = useWindowDimensions();
   let [toggleMenu, setToggleMenu] = useState(false);
   const [color, setColor] = useState(false);
 
+  const session = useSession();
 
-  useEffect(()=>{
+
+
+  useEffect(() => {
     const colorNav = () => {
-      if (window.scrollY >=80) {
-        setColor(true)
+      if (window.scrollY >= 80) {
+        setColor(true);
       } else {
-        setColor(false)
+        setColor(false);
       }
-    }
+    };
 
-    window.addEventListener("scroll", colorNav)
-
-  },[color])
+    window.addEventListener("scroll", colorNav);
+  }, [color]);
 
   return (
     <nav className={color ? "nav-all-container-color" : "nav-all-container"}>
       <div className="left-container-nav">
-        <Link href={'/'}>
+        <Link href={"/"}>
           <img
             src="/assets/Shoes-shop-logo.webp"
             alt="shoe shop logo"
@@ -45,12 +48,19 @@ export default function Header() {
           <Link className="link-button-nav" href={"/shop"}>
             Shop
           </Link>
-          <Link className="link-button-nav" href={"/login"}>
-            Sign In
-          </Link>
-          <Link className="link-button-nav-green" href={"/register"}>
-            Sign Up
-          </Link>
+          {session.status === "unauthenticated" && (
+            <div>
+              <Link className="link-button-nav" href={"/login"}>
+                Sign In
+              </Link>
+              <Link className="link-button-nav-green" href={"/register"}>
+                Sign Up
+              </Link>
+            </div>
+          )}
+          {session.status === "authorized" || session.status === "authenticated" && (
+            <button className="link-button-nav-green" onClick={signOut}>Log out</button>
+          )}
           <button className="button-cart-nav">
             <svg
               xmlns="http://www.w3.org/2000/svg"

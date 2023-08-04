@@ -84,6 +84,18 @@
     outline: none;
 }
 
+.form-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-login span {
+    margin-top: 20px;
+    font-family: "Poppins Regular";
+    color: #ff3333;
+}
 
 .button-login-container {
     width: 100%;
@@ -109,13 +121,20 @@
     box-shadow: 0px 6px 8px 2px rgba(128, 237, 153, 0.56);
 }
 
+.not-have-account-link-login {
+    margin-top: 20px;
+    text-decoration: underline;
+    color: #868686;
+}
+
 .login-auth-container {
     margin-top: 40px;
     display: flex;
-    width: 100%;
+    width: calc(100% - 20px);
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-right: 20px;
 }
 
 .login-auth-or-container {
@@ -136,15 +155,13 @@
     font-family: "Poppins regular";
 }
 
-.login-auth-container a {
+.login-auth-container button {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5px;
     background-color: transparent;
-    align-self: flex-start;
     margin-top: 30px;
-    margin-left: 60px;
     border-radius: 15px;
     padding: 8px 16px;
     font-family: "Poppins regular";
@@ -188,10 +205,10 @@
 
 @font-face {
     font-family: "Poppins";
-    src: url(../../../public/fonts/Poppins-Bold.ttf);
+    src: url(../../../../public/fonts/Poppins-Bold.ttf);
 }
 
 @font-face {
     font-family: "Poppins regular";
-    src: url(../../../public/fonts/Poppins-Regular.ttf);
+    src: url(../../../../public/fonts/Poppins-Regular.ttf);
 }

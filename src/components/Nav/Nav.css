@@ -37,6 +37,13 @@ html {
     padding-right: 32px;
 }
 
+.right-container-nav div {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+
+}
+
 .link-button-nav {
     text-decoration: none;
     color: #000;
@@ -52,6 +59,8 @@ html {
     border-radius: 10px;
     font-family: "Poppins";
     font-size: 1.3em;
+    border: none;
+    cursor: pointer;
     box-shadow: 0px 5px 4px 0px rgba(128, 237, 153, 0.56);
     transition: box-shadow .3s;
 }

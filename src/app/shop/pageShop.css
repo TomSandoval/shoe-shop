@@ -119,6 +119,8 @@
   display: flex;
   max-width: 100vw;
   width: 100%;
+  border-bottom: 1px solid #000;
+
 }
 
 .filters-panel-shop, .filters-panel-shop-active {
@@ -129,6 +131,7 @@
   justify-content: center;
   gap: 120px;
   align-items: center;
+  padding-bottom: 20px;
 }
 
 .filters-panel-shop .sticky-panel-filter, .filters-panel-shop-active .sticky-panel-filter {
