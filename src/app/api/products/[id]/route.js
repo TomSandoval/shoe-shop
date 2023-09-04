@@ -10,7 +10,7 @@ export const GET = async (request, { params }) => {
 
     const shoe = await Shoe.findById(id);
 
-    return new NextResponse(shoe, { status: 200 });
+    return new NextResponse(JSON.stringify(shoe), { status: 200 });
   } catch (error) {
     return new NextResponse(error, { status: 500 });
   }

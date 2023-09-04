@@ -25,8 +25,7 @@ export const POST = async (request) => {
         (s) => s.size == sizeSelected
       );
 
-      // variations[variationIndex].size[sizeIndexBuy].stock =
-      //   variations[variationIndex].size[sizeIndexBuy].stock - 1;
+
 
       await Shoe.findByIdAndUpdate(id, {
         $set: {

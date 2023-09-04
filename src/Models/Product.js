@@ -13,7 +13,7 @@ const colorSchema = new mongoose.Schema({
 
 const variationSchema = new mongoose.Schema({
   name: { type: String, required: false },
-  color: {colorSchema},
+  color: {type: String, required: false},
   images: { type: [String], required: false },
   size: [sizeSchema],
   in_stock: { type: Boolean, required: false },
@@ -34,7 +34,7 @@ const shoeSchema = new mongoose.Schema({
   have_variations: { type: Boolean, required: true },
   features: { type: [String], required: true },
   material: { type: String, required: true },
-  color: {colorSchema},
+  color: colorSchema,
   size: [sizeSchema],
   variations: [variationSchema],
   background_card: {type: String, required: true}

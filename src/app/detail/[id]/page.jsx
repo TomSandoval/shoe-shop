@@ -7,22 +7,21 @@ import Link from "next/link";
 import DiscountCards from "@/components/DiscountCards/discountCards";
 import Footer from "@/components/Footer/footer";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
+import axios from "axios";
+import { Poppins } from "next/font/google";
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "@/redux/cartslice";
+import { toast } from "react-hot-toast";
 
-const getData = (id) => {
-  const found = shoes.filter((s) => s.id == id);
-
-  if (found) {
-    return found;
-  } else {
-    throw new Error("Product not found!");
-  }
-};
+const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export default function Detail({ params }) {
   const idProduct = params.id;
 
-  const {width, height } = useWindowDimensions()
+  const { width, height } = useWindowDimensions();
 
+  const cartItems = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const [shoe, setShoe] = useState();
   const [selectedImage, setSelectedImage] = useState(0);
   const [colorSelected, setColorSelected] = useState(null);
@@ -30,102 +29,136 @@ export default function Detail({ params }) {
   const [Instock, setStock] = useState(null);
 
   useEffect(() => {
-    const data = getData(idProduct);
-    setShoe(data[0]);
+    const getData = async (id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products/${id}`
+        );
 
-    if (data[0].have_varations) {
-      const variationInStock = data[0].variations.find(
-        (v) => v.in_stock === true
-      );
+        const data = response.data;
+        setShoe(data);
 
-      const sizeInStock = variationInStock?.size.find((s) => s.stock > 0);
+        if (data.have_variations) {
+          const variationInStock = data.variations.find(
+            (v) => v.in_stock === true
+          );
 
-      setSizeSelected(sizeInStock.size);
-      setColorSelected(variationInStock.name);
-    } else {
+          const sizeInStock = variationInStock?.size.find((s) => s.stock > 0);
 
-      const sizeInStock = data[0].size.find(s => s.stock > 0);
+          setSizeSelected(sizeInStock.size);
+          setColorSelected(variationInStock.name);
+        } else {
+          const sizeInStock = data.size.find((s) => s.stock > 0);
 
+          setSizeSelected(sizeInStock.size);
+          setColorSelected(data.color.name);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      setSizeSelected(sizeInStock.size)
-      setColorSelected(data[0].color.name);
-    }
+    getData(idProduct);
   }, []);
 
+  useEffect(() => {
+    if (shoe?.have_variations) {
+      const shoeData = shoe.variations.find((v) => v.name === colorSelected);
 
-
-
-  useEffect(()=>{
-
-    if (shoe?.have_varations) {
-      const shoeData = shoe.variations.find(v => v.name === colorSelected);
-
-      const shoeSize = shoeData?.size.find(s => s.size == sizeSelected);
+      const shoeSize = shoeData.size.find((s) => s.size == sizeSelected);
 
       shoeSize?.stock <= 0 ? setStock(false) : setStock(true);
-      
     } else {
-      const sizeFound = shoe?.size.find(s => s.size == sizeSelected);
-      console.log(sizeFound);
+      const sizeFound = shoe?.size.find((s) => s.size == sizeSelected);
 
-      sizeFound?.stock > 0 ? setStock(true) : setStock(false)
+      sizeFound?.stock > 0 ? setStock(true) : setStock(false);
     }
-
-
-
-  },[sizeSelected, colorSelected])
-
+  }, [sizeSelected, colorSelected, shoe]);
 
   if (!shoe) {
     return <h1>Loading...</h1>;
   }
 
-  let {
-    id,
-    name,
-    description,
-    images,
-    brand,
-    gender,
-    in_stock,
-    category,
-    have_varations,
-    in_discount,
-    original_price,
-    discount_price,
-    size,
-    variations,
-    features,
-    material,
-    color,
-  } = shoe;
+  const handleAddCart = (product) => {
+    let sizeStock;
+    let productsInCart;
+    const data = {
+      sizeSelected: sizeSelected,
+      colorSelected: colorSelected,
+      product: product,
+    };
+
+    
+
+    if (!product.have_variations) {
+      sizeStock = product.size.find((s) => s.size == sizeSelected);
+      const thisProductInCart = cartItems.filter((i) => i.product === product && i.sizeSelected == sizeSelected);
+
+      if (!thisProductInCart.length) {
+        dispatch(add(data));
+        toast.success(`${product.name} added to cart`);
+        return;
+      } else {
+        productsInCart = thisProductInCart
+      }
+    } else {
+      const thisProductInCart = cartItems.filter(
+        (i) =>
+          i.product === product &&
+          i.sizeSelected == sizeSelected &&
+          i.colorSelected == colorSelected
+      );
+
+      if (!thisProductInCart.length) {
+        dispatch(add(data));
+        toast.success(`${product.name} added to cart`);
+        return;
+      } else {
+        const variationSelected = product.variations.find(
+          (v) => v.name == colorSelected
+        );
+
+        sizeStock = variationSelected.size.find((s) => s.size == sizeSelected);
+        productsInCart = thisProductInCart;
+      }
+    }
+
+    if (productsInCart.length < sizeStock.stock) {
+      dispatch(add(data));
+      toast.success(`${product.name} added to cart`);
+    } else {
+      toast.error("No more stock");
+    }
+  };
 
   const handleColorSelected = (e) => {
     const value = e.target.getAttribute("value");
 
     setColorSelected(value);
     setSelectedImage(0);
-    const variationFound = variations.find((v) => v.name === value);
+    const variationFound = shoe.variations.find((v) => v.name === value);
     const sizeInStock = variationFound?.size.find((s) => s.stock > 0);
-
-
 
     setSizeSelected(sizeInStock.size);
   };
 
   const handleOptionsImage = () => {
-    if (!have_varations) {
-      return images.map((i, index) => (
+    if (!shoe.have_variations) {
+      return shoe.images.map((i, index) => (
         <img
           onClick={() => setSelectedImage(index)}
-          className={index === selectedImage ? "image-option-selected" : "image-option"}
+          className={
+            index === selectedImage ? "image-option-selected" : "image-option"
+          }
           src={i}
-          alt={name}
+          alt={shoe.name}
           key={index}
         />
       ));
     } else {
-      const variationFound = variations.find((v) => v.name === colorSelected);
+      const variationFound = shoe.variations.find(
+        (v) => v.name === colorSelected
+      );
 
       return variationFound?.images.map((i, index) => (
         <img
@@ -135,24 +168,26 @@ export default function Detail({ params }) {
           }
           src={i}
           key={index}
-          alt={name}
+          alt={shoe.name}
         />
       ));
     }
   };
 
   const handlePrincipalImage = () => {
-    if (!have_varations) {
-      return <img src={images[selectedImage]} alt={name} />;
+    if (!shoe.have_variations) {
+      return <img src={shoe.images[selectedImage]} alt={shoe.name} />;
     } else {
       if (colorSelected) {
-        const variationFound = variations.find((v) => v.name === colorSelected);
+        const variationFound = shoe.variations.find(
+          (v) => v.name === colorSelected
+        );
 
         return (
           <img
             className="selected-image"
             src={variationFound?.images[selectedImage]}
-            alt={name}
+            alt={shoe.name}
           />
         );
       }
@@ -160,14 +195,16 @@ export default function Detail({ params }) {
   };
 
   const handleSize = () => {
-    if (!have_varations) {
-      return size.map((s, index) => (
+    if (!shoe.have_variations) {
+      return shoe.size.map((s, index) => (
         <option value={s.size} key={index}>
           {s.size}
         </option>
       ));
     } else {
-      const variationFound = variations.find((v) => v.name === colorSelected);
+      const variationFound = shoe.variations.find(
+        (v) => v.name === colorSelected
+      );
 
       return variationFound?.size.map((s, index) => (
         <option value={s.size} key={index}>
@@ -181,22 +218,19 @@ export default function Detail({ params }) {
     setSizeSelected(e.target.value);
   };
 
-
   const handleStock = () => {
-    if (!have_varations) {
-
-      const sizeFound = shoe.size.find(s => s.size == sizeSelected);
+    if (!shoe.have_variations) {
+      const sizeFound = shoe.size.find((s) => s.size == sizeSelected);
 
       if (sizeFound.stock > 0) {
         return (
           <div style={{ display: "flex", gap: "10px" }}>
-            <h3>Stock: </h3> <h3 className="stock-product">{sizeFound.stock}</h3>
+            <h3>Stock: </h3>{" "}
+            <h3 className="stock-product">{sizeFound.stock}</h3>
           </div>
         );
       } else {
-
         return (
-
           <div style={{ display: "flex" }}>
             <h3>Stock: </h3>
             <h3 className="no-stock-error"> No Stock</h3>
@@ -204,14 +238,15 @@ export default function Detail({ params }) {
         );
       }
     } else {
-      const variationFound = variations.find((v) => v.name === colorSelected);
+      const variationFound = shoe.variations.find(
+        (v) => v.name === colorSelected
+      );
 
       const sizeFound = variationFound?.size.find(
         (s) => s.size == sizeSelected
       );
 
       if (sizeFound.stock > 0) {
-
         return (
           <div style={{ display: "flex", gap: "10px" }}>
             <h3>Stock:</h3>
@@ -219,9 +254,7 @@ export default function Detail({ params }) {
           </div>
         );
       } else {
-
         return (
-
           <div style={{ display: "flex", gap: "10px" }}>
             <h3>Stock: </h3>
             <h3 className="no-stock-error">No stock</h3>
@@ -232,121 +265,133 @@ export default function Detail({ params }) {
   };
 
   return (
-
-    <main className="detail-section-all-container">
+    <main className={`detail-section-all-container ${poppins.className}`}>
       <section className="detail-product-section-container">
         <div className="left-detail-product-information">
           <div className="detail-images-container">
             <div className="detail-image-options">{handleOptionsImage()}</div>
             {handlePrincipalImage()}
           </div>
-          { width <= 800 &&
-
-                      <div className="detail-principal-information-box">
-            <div className="name-product-container">
-              <h1 className="name-product">{name}</h1>
-              <span className="brand-product">{brand}</span>
-            </div>
-            <div className="variations-container">
-              <div className="colour-variations-container">
-                <h4>Colour: {colorSelected}</h4>
-                <div className="options-color-container">
-                  {have_varations ? (
-                    variations.map(
-                      (v, index) =>
-                        v.in_stock && (
-                          <div
-                            onClick={(e) => handleColorSelected(e)}
-                            value={v.name}
-                            key={index}
-                            style={{ backgroundColor: v.color }}
-                            className="product-color-options"
-                          ></div>
-                        )
-                    )
-                  ) : (
-                    <div
-                      style={{ backgroundColor: color.color }}
-                      className="product-color-options"
-                    ></div>
-                  )}
+          {width <= 800 && (
+            <div className="detail-principal-information-box">
+              <div className="name-product-container">
+                <h1 className="name-product">{shoe.name}</h1>
+                <span className="brand-product">{shoe.brand}</span>
+              </div>
+              <div className="variations-container">
+                <div className="colour-variations-container">
+                  <h4>Colour: {colorSelected}</h4>
+                  <div className="options-color-container">
+                    {shoe.have_variations ? (
+                      shoe.variations.map(
+                        (v, index) =>
+                          v.in_stock && (
+                            <div
+                              onClick={(e) => handleColorSelected(e)}
+                              value={v.name}
+                              key={index}
+                              style={{ backgroundColor: v.color }}
+                              className="product-color-options"
+                            ></div>
+                          )
+                      )
+                    ) : (
+                      <div
+                        style={{ backgroundColor: shoe.color.color }}
+                        className="product-color-options"
+                      ></div>
+                    )}
+                  </div>
+                </div>
+                <div className="size-varitions-container">
+                  <h4>Size: </h4>
+                  <select
+                    name="size"
+                    value={sizeSelected}
+                    onChange={(e) => handleChangeSize(e)}
+                  >
+                    {handleSize()}
+                  </select>
                 </div>
               </div>
-              <div className="size-varitions-container">
-                <h4>Size: </h4>
-                <select
-                  name="size"
-                  value={sizeSelected}
-                  onChange={(e) => handleChangeSize(e)}
-                >
-                  {handleSize()}
-                </select>
+              <div className="price-container">
+                <h3 className={`price-title-box ${poppins.className}`}>
+                  Price:{" "}
+                </h3>
+                {shoe.in_discount ? (
+                  <>
+                    <h3 className="price-product">${shoe.discount_price}</h3>{" "}
+                    <h3 className="old-price-product">
+                      <span className="line-old-price-product"></span>$
+                      {shoe.original_price}
+                    </h3>
+                  </>
+                ) : (
+                  <h3 className="price-product">${shoe.original_price}</h3>
+                )}
               </div>
-            </div>
-            <div className="price-container">
-              <h3 className="price-title-box">Price: </h3>
-              {in_discount ? (
-                <>
-                  <h3 className="price-product">${discount_price}</h3>{" "}
-                  <h3 className="old-price-product">
-                    <span className="line-old-price-product"></span>$
-                    {original_price}
-                  </h3>
-                </>
-              ) : (
-                <h3 className="price-product">${original_price}</h3>
-              )}
-            </div>
-            <div className="stock-container">{handleStock()}</div>
+              <div className="stock-container">{handleStock()}</div>
 
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <div className="buttons-container">
-                <button className={Instock ? "information-box-buttons" : "information-box-buttons-dissable"}>
-                  Add to cart{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    style={{ fill: "rgba(0, 0, 0, 1)" }}
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <div className="buttons-container">
+                  <button
+                    onClick={() => handleAddCart(shoe)}
+                    className={
+                      Instock
+                        ? "information-box-buttons"
+                        : "information-box-buttons-dissable"
+                    }
                   >
-                    <circle cx="10.5" cy="19.5" r="1.5"></circle>
-                    <circle cx="17.5" cy="19.5" r="1.5"></circle>
-                    <path d="M21 7H7.334L6.18 4.23A1.995 1.995 0 0 0 4.333 3H2v2h2.334l4.743 11.385c.155.372.52.615.923.615h8c.417 0 .79-.259.937-.648l3-8A1.003 1.003 0 0 0 21 7zm-4 6h-2v2h-2v-2h-2v-2h2V9h2v2h2v2z"></path>
-                  </svg>
-                </button>
-                <button className={Instock ? "information-box-buttons" : "information-box-buttons-dissable"}>Buy Now</button>
+                    Add to cart{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      style={{ fill: "rgba(0, 0, 0, 1)" }}
+                    >
+                      <circle cx="10.5" cy="19.5" r="1.5"></circle>
+                      <circle cx="17.5" cy="19.5" r="1.5"></circle>
+                      <path d="M21 7H7.334L6.18 4.23A1.995 1.995 0 0 0 4.333 3H2v2h2.334l4.743 11.385c.155.372.52.615.923.615h8c.417 0 .79-.259.937-.648l3-8A1.003 1.003 0 0 0 21 7zm-4 6h-2v2h-2v-2h-2v-2h2V9h2v2h2v2z"></path>
+                    </svg>
+                  </button>
+                  <button
+                    className={
+                      Instock
+                        ? "information-box-buttons"
+                        : "information-box-buttons-dissable"
+                    }
+                  >
+                    Buy Now
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-
-          }
+          )}
           <div className="detail-description-product">
             <h2 className="detail-section-title">Description</h2>
             <div className="detail-hr"></div>
-            <p className="detail-text">{description}</p>
+            <p className="detail-text">{shoe.description}</p>
           </div>
           <div className="detail-features-product">
             <h2 className="detail-section-title">Features</h2>
             <div className="detail-hr"></div>
-            <p className="detail-text">Brand: {brand}</p>
+            <p className="detail-text">Brand: {shoe.brand}</p>
             <br />
-            <p className="detail-text">Gender: {gender}</p>
+            <p className="detail-text">Gender: {shoe.gender}</p>
             <br />
-            <p className="detail-text">Category: {category}</p>
+            <p className="detail-text">Category: {shoe.category}</p>
             <br />
-            <p className="detail-text">
-              Material: {material}
-            </p>
+            <p className="detail-text">Material: {shoe.material}</p>
             <ul className="detail-features-product-list">
-              {features.map((f, index) => (
+              {shoe.features.map((f, index) => (
                 <li className="list-features-item" key={index}>
                   {f}
                 </li>
@@ -389,103 +434,127 @@ export default function Detail({ params }) {
             </p>
           </div>
         </div>
-        {width > 800 && <div className="right-detail-product-information">
+        {width > 800 && (
+          <div className="right-detail-product-information">
             <div className="detail-principal-information-box">
-            <div className="name-product-container">
-              <h1 className="name-product">{name}</h1>
-              <span className="brand-product">{brand}</span>
-            </div>
-            <div className="variations-container">
-              <div className="colour-variations-container">
-                <h4>Colour: {colorSelected}</h4>
-                <div className="options-color-container">
-                  {have_varations ? (
-                    variations.map(
-                      (v, index) =>
-                        v.in_stock && (
-                          <div
-                            onClick={(e) => handleColorSelected(e)}
-                            value={v.name}
-                            key={index}
-                            style={{ backgroundColor: v.color }}
-                            className="product-color-options"
-                          ></div>
-                        )
-                    )
-                  ) : (
-                    <div
-                      style={{ backgroundColor: color.color }}
-                      className="product-color-options"
-                    ></div>
-                  )}
+              <div className="name-product-container">
+                <h1 className="name-product">{shoe.name}</h1>
+                <span className="brand-product">{shoe.brand}</span>
+              </div>
+              <div className="variations-container">
+                <div className="colour-variations-container">
+                  <h4>Colour: {colorSelected}</h4>
+                  <div className="options-color-container">
+                    {shoe.have_variations === true ? (
+                      shoe.variations.map(
+                        (v, index) =>
+                          v.in_stock && (
+                            <div
+                              onClick={(e) => handleColorSelected(e)}
+                              value={v.name}
+                              key={index}
+                              style={{ backgroundColor: v.color }}
+                              className="product-color-options"
+                            ></div>
+                          )
+                      )
+                    ) : (
+                      <div
+                        style={{ backgroundColor: shoe.color.color }}
+                        className="product-color-options"
+                      ></div>
+                    )}
+                  </div>
+                </div>
+                <div className="size-varitions-container">
+                  <h4>Size: </h4>
+                  <select
+                    name="size"
+                    value={sizeSelected}
+                    onChange={(e) => handleChangeSize(e)}
+                  >
+                    {handleSize()}
+                  </select>
                 </div>
               </div>
-              <div className="size-varitions-container">
-                <h4>Size: </h4>
-                <select
-                  name="size"
-                  value={sizeSelected}
-                  onChange={(e) => handleChangeSize(e)}
-                >
-                  {handleSize()}
-                </select>
+              <div className="price-container">
+                <h3 className="price-title-box">Price: </h3>
+                {shoe.in_discount ? (
+                  <>
+                    <h3 className="price-product">${shoe.discount_price}</h3>{" "}
+                    <h3 className="old-price-product">
+                      <span className="line-old-price-product"></span>$
+                      {shoe.original_price}
+                    </h3>
+                  </>
+                ) : (
+                  <h3 className="price-product">${shoe.original_price}</h3>
+                )}
               </div>
-            </div>
-            <div className="price-container">
-              <h3 className="price-title-box">Price: </h3>
-              {in_discount ? (
-                <>
-                  <h3 className="price-product">${discount_price}</h3>{" "}
-                  <h3 className="old-price-product">
-                    <span className="line-old-price-product"></span>$
-                    {original_price}
-                  </h3>
-                </>
-              ) : (
-                <h3 className="price-product">${original_price}</h3>
-              )}
-            </div>
-            <div className="stock-container">{handleStock()}</div>
+              <div className="stock-container">{handleStock()}</div>
 
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <div className="buttons-container">
-                <button className={Instock ? "information-box-buttons" : "information-box-buttons-dissable"}>
-                  Add to cart{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    style={{ fill: "rgba(0, 0, 0, 1)" }}
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <div className="buttons-container">
+                  <button
+                    onClick={() => handleAddCart(shoe)}
+                    className={
+                      Instock
+                        ? "information-box-buttons"
+                        : "information-box-buttons-dissable"
+                    }
                   >
-                    <circle cx="10.5" cy="19.5" r="1.5"></circle>
-                    <circle cx="17.5" cy="19.5" r="1.5"></circle>
-                    <path d="M21 7H7.334L6.18 4.23A1.995 1.995 0 0 0 4.333 3H2v2h2.334l4.743 11.385c.155.372.52.615.923.615h8c.417 0 .79-.259.937-.648l3-8A1.003 1.003 0 0 0 21 7zm-4 6h-2v2h-2v-2h-2v-2h2V9h2v2h2v2z"></path>
-                  </svg>
-                </button>
-                <button className={Instock ? "information-box-buttons" : "information-box-buttons-dissable"}>Buy Now</button>
+                    Add to cart{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      style={{ fill: "rgba(0, 0, 0, 1)" }}
+                    >
+                      <circle cx="10.5" cy="19.5" r="1.5"></circle>
+                      <circle cx="17.5" cy="19.5" r="1.5"></circle>
+                      <path d="M21 7H7.334L6.18 4.23A1.995 1.995 0 0 0 4.333 3H2v2h2.334l4.743 11.385c.155.372.52.615.923.615h8c.417 0 .79-.259.937-.648l3-8A1.003 1.003 0 0 0 21 7zm-4 6h-2v2h-2v-2h-2v-2h2V9h2v2h2v2z"></path>
+                    </svg>
+                  </button>
+                  <button
+                    className={
+                      Instock
+                        ? "information-box-buttons"
+                        : "information-box-buttons-dissable"
+                    }
+                  >
+                    Buy Now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div> }
+        )}
       </section>
       <section className="products-on-sale-section">
         <h2 className="products-on-sale-section-title">You may also like</h2>
         <div className="detail-hr"></div>
         <div className="cards-on-sale-container">
           {shoes.slice(0, 6).map((s, index) => (
-            <DiscountCards key={index} image={s.imageURL || s.images[0]} name={s.name} discountPrice={s.discount_price} originalPrice={s.original_price} id={s.id} />
+            <DiscountCards
+              key={index}
+              image={s.imageURL || s.images[0]}
+              name={s.name}
+              discountPrice={s.discount_price}
+              originalPrice={s.original_price}
+              id={s.id}
+            />
           ))}
         </div>
       </section>
-    <Footer/>
+      <Footer />
     </main>
   );
 }

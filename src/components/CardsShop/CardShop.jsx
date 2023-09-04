@@ -4,6 +4,7 @@ import "./CardShop.css";
 
 export default function CardShop({name,img,brand,price,variations, backgroundColor, id, width}) {
 
+
     const parseName = (name) => {
 
 
@@ -24,7 +25,7 @@ export default function CardShop({name,img,brand,price,variations, backgroundCol
 
 
   return (
-    <Link  href={`/detail/${id}`}  className="card-shop-all-container">
+    <Link  href={`/detail/${id}`} key={id}  className="card-shop-all-container">
       <div className="img-container-card-shop" style={{backgroundColor: backgroundColor}}>
         <img className="img-card-shop" src={img} alt={name} />
       </div>

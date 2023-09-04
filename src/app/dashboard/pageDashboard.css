@@ -1,0 +1,428 @@
+.dashboard-all-container {
+  max-width: 100vw;
+  width: 100%;
+  position: relative;
+  top: 80px;
+  height: calc(100vh - 80px);
+  display: flex;
+}
+
+.dashboard-right-panel {
+  width: 20%;
+  min-width: 140px;
+  height: 100%;
+  background-color: #80ed99;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.dashboard-left-panel {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 30px;
+}
+
+.dashboard-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #000;
+  margin-top: 20px;
+}
+
+.dashboard-right-panel-options-container {
+  margin-top: 50%;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 70px;
+}
+
+.dashboard-right-panel-option-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 170px;
+}
+
+.dashboard-right-panel-options-container > div > span {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.dashboard-right-panel-active {
+  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.analytics-container {
+  width: 500px;
+  max-height: 370px;
+  background-color: #e9e9e9;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.analytics-container > h3 {
+  font-size: 1.3em;
+  text-decoration: underline;
+  align-self: flex-start;
+}
+
+.analytics-container > div {
+  height: 90%;
+}
+
+.section-products {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-product-card {
+  width: 90%;
+  height: 300px;
+  padding: 10px;
+  background-color: #fff;
+  display: flex;
+  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+.dashboard-product-card-image-container {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-product-card-image-container > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dashboard-product-card-info-container {
+  display: flex;
+  flex: 1;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dashboard-product-card-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-product-card-title-container > h4 {
+  font-size: 1.3em;
+}
+
+.dashboard-product-card-info-container > p {
+  text-align: center;
+}
+
+.dashboard-product-card-features-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.dashboard-product-card-buttons-container {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-product-card-buttons-container > button {
+  padding: 8px 16px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  background-color: #80ed99;
+}
+
+.search-product-input {
+  padding: 6px 12px;
+  min-width: 300px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  outline: none;
+  font-size: 1.2em;
+}
+
+
+.dashboard-user-buttons-container {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-user-buttons-container > button {
+  padding: 8px 16px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.dashboard-user-buttons-container > button:first-child {
+  background-color: #FF8989;
+}
+
+.dashboard-user-buttons-container > button:last-child {
+  background-color: #80ed99;
+}
+
+.button-user-suspended {
+  background-color: #22577A;
+}
+
+.form-edit-product {
+  display: flex;
+  position: relative;
+  top: 50px;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+  padding: 16px;
+}
+
+.dashboard-form-product-two-input-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-form-product-two-input-container > div {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+.dashboard-form-product-two-input-container > div > input {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  outline: none;
+  height: 18px;
+}
+
+.dashboard-form-product-two-input-container > div > input[type=color] {
+  height: 40px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+.dashboard-form-product-two-input-container > div > ::-webkit-color-swatch {
+  border-radius: 10px;
+}
+
+.dashboard-form-product-one-input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-form-product-one-input-container > textarea {
+  border-radius: 10px;
+  width: auto;
+  height: 120px;
+  padding: 6px;
+}
+
+.dashboard-form-product-one-input-container > select, .dashboard-form-product-one-input-container > input {
+  font-size: 1em;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+.features-container {
+  width: 99%;
+  background-color: #fff;
+  height: 220px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  padding: 6px;
+}
+
+.features-container > span {
+  background-color: #d8d8d8;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+
+
+
+.dashboard-product-button-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: transparent;
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-size: 1.3em;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.dashboard-product-button-back:hover {
+  background-color: #d8d8d8;
+}
+
+.variation-data-container {
+  background-color: rgba(128, 237, 153,0.5);
+  padding: 16px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-form-product-variations-images-container, .dashboard-form-product-variations-images-container-text {
+  border: 1px dashed #000;
+  width: 100%;
+  border-radius: 10px;
+  overflow-x: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 12px;
+  overflow-y: hidden;
+  gap: 12px;
+  padding: 12px;
+  min-height: 120px;
+}
+
+.dashboard-form-product-variations-images-container-text {
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-form-product-variations-images-container-text > span {
+  font-size: 1.2em;
+}
+
+.dashboard-form-product-variations-images-container > div {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.dashboard-form-product-variations-images-container > div > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard-form-product-variations-images-container > div > button {
+  position: absolute;
+  top: 0;
+  padding: 8px;
+  border-radius: 100px;
+  border: none;
+  text-align: center;
+  background-color: #FF8989;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+
+
+
+.button-remove-variation-dashboard, .button-add-size-dashboard, .button-add-variation-dashboard, .dashboard-button-update { 
+  background-color: #FF8989;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  font-size: 1.2em;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dashboard-button-update {
+  background-color: #80ed99;
+  align-self: flex-end;
+  font-size: 1.3em;
+}
+
+.button-add-size-dashboard {
+  background-color: #4082D0;
+  align-self: center;
+}
+
+.dashboard-hr {
+  width: 100%;
+  height: 0;
+  border: 1px dashed #000 ;
+}
+
+.dashboard-size-data-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dashboard-size-data-container > button {
+  padding: 8px 12px;
+  background-color: #FF8989;
+  border: none;
+  color: #fff;
+  font-size: 1em;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dashboard-add-variation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: #E7F5FF;
+  gap: 16px;
+  border-radius: 15px;
+}
+
+.button-add-variation-dashboard {
+  background-color: #80ed99;
+}

@@ -1,14 +1,21 @@
 "use client";
 import "./pageCreate.css";
 import { useState, useEffect, useRef } from "react";
+import CardCreate from "@/components/CardCreate/cardCreate";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function CreateProduct() {
+  const session = useSession();
   const inputRef = useRef(null);
+  const simpleInput = useRef(null);
+  const router = useRouter();
   const [formProduct, setFormProduct] = useState({
     name: "",
     brand: "",
@@ -22,14 +29,14 @@ export default function CreateProduct() {
     variations: [],
     discount_price: null,
     features: [],
-    have_variations: true,
+    have_variations: false,
     color: {
       name: "",
       color: "",
     },
     size: [],
     images: [],
-    background_card: "",
+    background_card: "#80ed99",
   });
   const [formPage, setFormPage] = useState(0);
   const [variationsData, setVariationsData] = useState({
@@ -45,7 +52,18 @@ export default function CreateProduct() {
   });
   const [features, setFeatures] = useState("");
 
+
+  useEffect(()=>{
+    if (session.data?.user?.email !== "admin@email.com") {
+      router.push("/")
+    }
+  },[session])
+
   const handleDrag = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragSimple = (e) => {
     e.preventDefault();
   };
 
@@ -70,12 +88,43 @@ export default function CreateProduct() {
     }
   };
 
-  const handleDrop = async (e) => {
+  const handleDropSimple = async (e) => {
     e.preventDefault();
 
     const files = e.dataTransfer.files;
 
-    console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      await handleFileSimple(file);
+    }
+  };
+
+  const handleFileSimple = async (file) => {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "shoe-shop");
+
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dycpuotwh/image/upload",
+        data
+      );
+
+      const fileCloudy = await res.data;
+
+      setFormProduct((prevData) => ({
+        ...prevData,
+        images: [...prevData.images, fileCloudy.secure_url],
+      }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+
+    const files = e.dataTransfer.files;
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -92,7 +141,25 @@ export default function CreateProduct() {
     }
   };
 
+  const handleSimpleImagesInput = async (e) => {
+    const files = e.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      await handleFileSimple(file);
+    }
+  };
+
   const addVariationToProduct = () => {
+    if (
+      !variationsData.name ||
+      !variationsData.color ||
+      variationsData.images.length === 0 ||
+      variationsData.size.length === 0
+    ) {
+      return null;
+    }
+
     setFormProduct((prevData) => ({
       ...prevData,
       variations: [...prevData.variations, variationsData],
@@ -117,6 +184,17 @@ export default function CreateProduct() {
 
   const handleInputsChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "original_price" || name === "discount_price") {
+      if (value) {
+        setFormProduct({
+          ...formProduct,
+          [name]: parseFloat(value),
+        });
+
+        return;
+      }
+    }
 
     setFormProduct({
       ...formProduct,
@@ -173,7 +251,7 @@ export default function CreateProduct() {
 
     setSizeData({
       ...sizeData,
-      [name]: value,
+      [name]: parseFloat(value),
     });
   };
 
@@ -216,6 +294,80 @@ export default function CreateProduct() {
 
     setVariationsData({
       ...variationsData,
+      images: newImagesArray,
+    });
+  };
+
+  const handleRemoveVariation = (index) => {
+    const newVariationArray = formProduct.variations.filter(
+      (_, i) => i !== index
+    );
+
+  
+
+    setFormProduct({
+      ...formProduct,
+      variations: newVariationArray,
+    });
+  };
+
+  const handleSelectVariations = (e) => {
+    const { name, value } = e.target;
+
+    if (value === "yes") {
+      setFormProduct({
+        ...formProduct,
+        [name]: true,
+      });
+    } else {
+      setFormProduct({
+        ...formProduct,
+        [name]: false,
+      });
+    }
+  };
+
+  const handleChangeSimpleProduct = (e) => {
+    const { name, value } = e.target;
+
+    setFormProduct({
+      ...formProduct,
+      color: {
+        ...formProduct.color,
+        [name]: value,
+      },
+    });
+  };
+
+  const handleAddSizeSimpleProduct = () => {
+    setFormProduct({
+      ...formProduct,
+      size: [...formProduct.size, sizeData],
+    });
+
+    setSizeData({
+      size: "",
+      stock: "",
+    });
+  };
+
+  const handleRemoveSimpleSize = (index) => {
+    const newSizeArray = formProduct.size.filter((_, i) => i !== index);
+
+    setFormProduct({
+      ...formProduct,
+      size: newSizeArray,
+    });
+  };
+
+  const handleRemoveSimpleImage = (index, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const newImagesArray = formProduct.images.filter((_, i) => i !== index);
+
+    setFormProduct({
+      ...formProduct,
       images: newImagesArray,
     });
   };
@@ -325,7 +477,7 @@ export default function CreateProduct() {
                     value={formProduct.original_price}
                     onChange={handleInputsChange}
                     placeholder="Original Price"
-                    type="text"
+                    type="number"
                     name="original_price"
                     id="original_price"
                   />
@@ -337,7 +489,7 @@ export default function CreateProduct() {
                     onChange={handleInputsChange}
                     value={formProduct.discount_price}
                     placeholder="Discount Price"
-                    type="text"
+                    type="number"
                     name="discount_price"
                     id="discount_price"
                   />
@@ -350,12 +502,35 @@ export default function CreateProduct() {
                   onChange={handleInputsChange}
                   value={formProduct.original_price}
                   placeholder="Price"
-                  type="text"
+                  type="number"
                   name="original_price"
                   id="original_price"
                 />
               </div>
             )}
+            <div
+              className="one-input-container"
+              style={{ alignSelf: "center", justifySelf: "center" }}
+            >
+              <label htmlFor="background_card">Card color</label>
+              <input
+                type="color"
+                value={formProduct.background_card}
+                name="background_card"
+                onChange={(e) => {
+                  const { name, value } = e.target;
+
+                  setFormProduct({
+                    ...formProduct,
+                    [name]: value,
+                  });
+                }}
+              />
+              <span>
+                Make sure the color of the card is not similar to the color of
+                the shoe
+              </span>
+            </div>
             <div className="one-input-container">
               <label htmlFor="features">Features</label>
               <input
@@ -413,9 +588,12 @@ export default function CreateProduct() {
                 Does this product have variations?
               </label>
               <select
-                defaultValue={formProduct.have_variations ? "yes" : "no"}
+                defaultValue={
+                  formProduct.have_variations === true ? "yes" : "no"
+                }
                 name="have_variations"
                 id="have_variations"
+                onChange={handleSelectVariations}
               >
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
@@ -428,16 +606,22 @@ export default function CreateProduct() {
                     <div className="variation-confirm-container" key={index}>
                       <div className="variation-confirm-data">
                         <div>
-                          <span>Name colour</span>
+                          <span>Name color</span>
                           <span>{v.name}</span>
                         </div>
                         <div>
                           <span>Color</span>
-                          <div style={{backgroundColor: v.color}}></div>
+                          <div
+                            className="variation-confirm-color-div"
+                            style={{ backgroundColor: v.color }}
+                          ></div>
                         </div>
                       </div>
-                      {v.size.map((s, index) => (
-                        <div key={index}>
+                      {v?.size?.map((s, index) => (
+                        <div
+                          className="variation-confirm-size-container"
+                          key={index}
+                        >
                           <div>
                             <span>Size</span>
                             <span>{s.size}</span>
@@ -448,31 +632,45 @@ export default function CreateProduct() {
                           </div>
                         </div>
                       ))}
-                      <div>
-                        {v.images.map((i,index) => (
-                          <img className="variation-confirm-images" src={i} key={index} alt={`variation confirm ${index}`}/>
+                      <div className="variation-confirm-images-container">
+                        {v?.images?.map((i, index) => (
+                          <img
+                            className="variation-confirm-images"
+                            src={i}
+                            key={index}
+                            alt={`variation confirm ${index}`}
+                          />
                         ))}
                       </div>
+                      <button
+                        onClick={() => handleRemoveVariation(index)}
+                        className="remove-variation-button"
+                        type="button"
+                      >
+                        Remove variation
+                      </button>
                     </div>
                   );
                 })}
 
                 <div className="two-inputs-container">
                   <div>
-                    <label htmlFor="name">Colour name</label>
+                    <label htmlFor="name">color name</label>
                     <input
                       onChange={handleChangeVariation}
                       type="text"
                       name="name"
+                      value={variationsData.name}
                       autoComplete="off"
                     />
                   </div>
                   <div>
-                    <label htmlFor="color">Colour</label>
+                    <label htmlFor="color">color</label>
                     <input
                       onChange={handleChangeVariation}
                       type="color"
                       name="color"
+                      value={variationsData.color}
                       autoComplete="off"
                     />
                   </div>
@@ -575,7 +773,124 @@ export default function CreateProduct() {
                   multiple
                 />
               </>
-            ) : null}
+            ) : (
+              <>
+                <div className="two-inputs-container">
+                  <div>
+                    <label htmlFor="name">color name</label>
+                    <input
+                      onChange={handleChangeSimpleProduct}
+                      value={formProduct.color.name}
+                      type="text"
+                      name="name"
+                      id="name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="color">color</label>
+                    <input
+                      onChange={handleChangeSimpleProduct}
+                      value={formProduct.color.color}
+                      type="color"
+                      name="color"
+                      id="color"
+                    />
+                  </div>
+                </div>
+                {formProduct.size.map((s, index) => (
+                  <div className="product-size-confirm" key={index}>
+                    <div>
+                      <span className="product-size-confirm-title">Size</span>
+                      <span className="product-size-confirm-info">
+                        {s.size}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="product-size-confirm-title">
+                        Size stock
+                      </span>
+                      <span className="product-size-confirm-info">
+                        {s.stock}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveSimpleSize(index)}
+                      type="button"
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+                <div className="two-inputs-container">
+                  <div>
+                    <label htmlFor="size">Size</label>
+                    <input
+                      value={sizeData.size}
+                      type="number"
+                      name="size"
+                      id="size"
+                      onChange={handleSizeChange}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="stock">Size stock</label>
+                    <input
+                      value={sizeData.stock}
+                      type="number"
+                      name="stock"
+                      id="stock"
+                      onChange={handleSizeChange}
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={handleAddSizeSimpleProduct}
+                  className="add-size-button"
+                  type="button"
+                >
+                  Add size
+                </button>
+                <div
+                  onDrop={handleDropSimple}
+                  onDragOver={handleDragSimple}
+                  onClick={() => simpleInput.current.click()}
+                  className={
+                    formProduct.images.length
+                      ? "drag-drop-container-active"
+                      : "drag-drop-container"
+                  }
+                >
+                  {formProduct.images.length > 0 ? (
+                    formProduct.images.map((i, index) => (
+                      <div className="" key={index}>
+                        <img src={i} alt={`product image ${index}`} />
+                        <button
+                          onClick={(e) => handleRemoveSimpleImage(index, e)}
+                          type="button"
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <p>
+                        Drag & drop your images or click to select the images
+                      </p>
+                      <p>Make sure images have a background removed</p>
+                    </>
+                  )}
+                </div>
+                <input
+                  onChange={handleSimpleImagesInput}
+                  accept="image/jpeg, image/png, image/webp"
+                  multiple
+                  ref={simpleInput}
+                  type="file"
+                  style={{ display: "none" }}
+                />
+              </>
+            )}
             {formProduct.have_variations && (
               <button
                 onClick={addVariationToProduct}
@@ -588,6 +903,195 @@ export default function CreateProduct() {
           </>
         );
       }
+
+      case 3: {
+        return (
+          <div className="confirm-product-form-container">
+            <div className="confirm-product-two-info-container">
+              <div className="one-span-info-container">
+                <span>Name</span>
+                <span>{formProduct.name}</span>
+              </div>
+              <div className="one-span-info-container">
+                <span>Brand</span>
+                <span>{formProduct.brand}</span>
+              </div>
+            </div>
+            <div className="confirm-product-two-info-container">
+              <div className="one-span-info-container">
+                <span>Category</span>
+                <span>{formProduct.category}</span>
+              </div>
+              <div className="one-span-info-container">
+                <span>Gender</span>
+                <span>{formProduct.gender}</span>
+              </div>
+            </div>
+            <div className="confirm-product-two-info-container">
+              <div className="one-span-info-container">
+                <span>Material</span>
+                <span>{formProduct.material}</span>
+              </div>
+              <div className="one-span-info-container">
+                <span>In discount</span>
+                <span>{formProduct.in_discount == true ? "Yes" : "No"}</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="confirm-product-two-info-container">
+                <div className="one-span-info-container">
+                  <span>Original price</span>
+                  <span>${formProduct.original_price}</span>
+                </div>
+                <div className="one-span-info-container">
+                  <span>Discount price</span>
+                  <span>${formProduct.discount_price}</span>
+                </div>
+              </div>
+            </div>
+            <div className="description-confirm-product-container">
+              <span>Description</span>
+              <div>
+                <span>{formProduct.description}</span>
+              </div>
+            </div>
+            <div className="features-confirm-product-container">
+              <span>Features</span>
+              <ul className="list-features-confirm-product">
+                {formProduct.features.map((f, index) => {
+                  return <li key={index}>{f}</li>;
+                })}
+              </ul>
+            </div>
+            {formProduct.have_variations === true ? (
+              <>
+                {formProduct.variations.map((v, index) => {
+                  return (
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}
+                      key={index}
+                    >
+                      <div className="confirm-product-two-info-container">
+                        <div className="one-span-info-container">
+                          <span>Variation name</span>
+                          <span>{v.name}</span>
+                        </div>
+                        <div className="one-span-info-container">
+                          <span>Variation Color</span>
+                          <span
+                            style={{
+                              backgroundColor: v.color,
+                              width: "100px",
+                              height: "20px",
+                              marginTop: "6px",
+                              borderRadius: "5px",
+                            }}
+                          ></span>
+                        </div>
+                      </div>
+                      <div className="images-confirm-product-container">
+                        <span>Images</span>
+                        <div>
+                          {v.images.map((i, index) => {
+                            return (
+                              <img
+                                key={index}
+                                src={i}
+                                alt={`${formProduct.name} ${index}`}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="size-confirm-product-container">
+                        <span>Size</span>
+                        {v.size.map((s, index) => {
+                          return (
+                            <div
+                              className="confirm-product-two-info-container"
+                              key={index}
+                            >
+                              <div className="one-span-info-container">
+                                <span>Size</span>
+                                <span>{s.size}</span>
+                              </div>
+                              <div className="one-span-info-container">
+                                <span>Size stock</span>
+                                <span>{s.stock}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                <div className="confirm-product-two-info-container">
+                  <div className="one-span-info-container">
+                    <span>Color name</span>
+                    <span>{formProduct.color.name}</span>
+                  </div>
+                  <div className="one-span-info-container">
+                    <span>Color</span>
+                    <span
+                      style={{
+                        backgroundColor: formProduct.color.color,
+                        width: "100%",
+                        height: "20px",
+                        marginTop: "6px",
+                        borderRadius: "5px",
+                      }}
+                    ></span>
+                  </div>
+                </div>
+                <div className="images-confirm-product-container">
+                  <span>Images</span>
+                  <div>
+                    {formProduct.images.map((i, index) => {
+                      return (
+                        <img
+                          src={i}
+                          key={index}
+                          alt={`${formProduct.name} ${index}`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="size-confirm-product-container">
+                  <span>Size</span>
+                  {formProduct.size.map((s, index) => {
+                    return (
+                      <div
+                        className="confirm-product-two-info-container"
+                        key={index}
+                      >
+                        <div className="one-span-info-container">
+                          <span>Size</span>
+                          <span>{s.size}</span>
+                        </div>
+                        <div className="one-span-info-container">
+                          <span>Size stock</span>
+                          <span>{s.stock}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        );
+      }
       default: {
       }
     }
@@ -595,18 +1099,70 @@ export default function CreateProduct() {
 
   const handleNavigation = (nav) => {
     if (nav === "next") {
-      setFormPage(formPage + 1);
+      if (formPage < 3) {
+        setFormPage(formPage + 1);
+      }
     } else {
-      setFormPage(formPage - 1);
+      if (formPage > 0) {
+        setFormPage(formPage - 1);
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    const formToJson = JSON.stringify(formProduct);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/products",
+        formToJson
+      );
+
+      if (response.status === 200) {
+        toast.success("Product created!");
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <main className={`create-all-container ${poppins.className}`}>
       <div className="box-create-container">
-        <div className="card-create-box"></div>
+        <div className="card-create-box">
+          <CardCreate data={formProduct}/>
+        </div>
         <div className="form-create-box">
-          <div className="bar-page-create-form"></div>
+          <div className="bar-page-create-form">
+            <span
+              className={
+                formPage === 0
+                  ? "bar-page-create-form-active"
+                  : "bar-page-create-form-inactive"
+              }
+            >
+              1
+            </span>
+            <span
+              className={
+                formPage === 1
+                  ? "bar-page-create-form-active"
+                  : "bar-page-create-form-inactive"
+              }
+            >
+              2
+            </span>
+            <span
+              className={
+                formPage === 2
+                  ? "bar-page-create-form-active"
+                  : "bar-page-create-form-inactive"
+              }
+            >
+              3
+            </span>
+          </div>
           <form className="form-create-product" action="create">
             {handleInputs(formPage)}
           </form>
@@ -617,12 +1173,18 @@ export default function CreateProduct() {
             >
               Back
             </button>
-            <button
-              className="buttons-navigation"
-              onClick={() => handleNavigation("next")}
-            >
-              Next
-            </button>
+            {formPage !== 3 ? (
+              <button
+                className="buttons-navigation"
+                onClick={() => handleNavigation("next")}
+              >
+                Next
+              </button>
+            ) : (
+              <button onClick={handleSubmit} className="buttons-navigation">
+                Confirm
+              </button>
+            )}
           </div>
         </div>
       </div>

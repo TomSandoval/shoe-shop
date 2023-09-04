@@ -22,6 +22,9 @@
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   border-right: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-create-box {
@@ -29,12 +32,13 @@
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   display: flex;
+  gap: 12px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.form-create-product {
+.form-create-product, .form-create-product-justify {
   width: 100%;
   height: 80%;
   display: flex;
@@ -45,13 +49,17 @@
   max-height: 80%;
 }
 
+.form-create-product-justify {
+  justify-content: center;
+}
+
 .one-input-container {
   position: relative;
 }
 
 .one-input-container > span {
-  position: absolute;
-  right: 0;
+
+  color: #888888;
 }
 
 .one-input-container,
@@ -67,6 +75,18 @@
   border: 1px solid #ddd;
   font-size: 1.2em;
   outline: none;
+}
+
+.one-input-container > input[type=color] {
+  height: 60px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+} 
+
+.one-input-container > input[type=color]::-webkit-color-swatch {
+  border-radius: 15px;
 }
 
 .one-input-container label {
@@ -93,7 +113,7 @@
 .two-inputs-container div input {
   padding: 12px 6px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid;
   font-size: 1.2em;
   outline: none;
 }
@@ -185,7 +205,7 @@
     box-shadow: 0px 5px 4px 0px rgba(128, 237, 153, 0.56);
     transition: box-shadow .3s;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .buttons-navigation:hover {
@@ -275,6 +295,8 @@
   border-radius: 10px;
   color: #fff;
   cursor: pointer;
+  align-self: center;
+  margin-top: 20px;
 }
 
 .add-variation-button {
@@ -289,7 +311,7 @@
 }
 
 
-.variation-product-size-confirm {
+.variation-product-size-confirm, .product-size-confirm {
   width: 70%;
   display: flex;
   justify-content: space-around;
@@ -299,7 +321,7 @@
   position: relative;
 }
 
-.variation-product-size-confirm > div {
+.variation-product-size-confirm > div, .product-size-confirm > div {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -307,11 +329,11 @@
   align-items: center;
 }
 
-.variation-product-size-confirm-title {
+.variation-product-size-confirm-title, .product-size-confirm-title {
   border-bottom: 1px solid #000;
 }
 
-.variation-product-size-confirm button {
+.variation-product-size-confirm button, .product-size-confirm > button {
   position: absolute;
   right: 0;  
   top: -15px;
@@ -328,7 +350,7 @@
   width: 30px;
   height: 30px;
   right: 10px;
-  top: 28px;
+  top: 45%;
   background-color: #80ed99;
   border-radius: 10px;
   display: grid;
@@ -341,9 +363,10 @@
   width: 70%;
   display: flex;
   flex-direction: column;
-  background-color: #93bff5;
+  background-color: #add1fd2a;
   padding: 12px;
   border-radius: 10px;
+  border: 1px solid #000;
 }
 
 
@@ -354,12 +377,165 @@
 .variation-confirm-data {
   display: flex;
   justify-content: space-around;
+  border-bottom: 2px solid #80ed99;
+}
+
+.variation-confirm-data > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  text-align: center;
+  gap: 6px;   
+}
+
+.variation-confirm-data > div > span:first-child, .variation-confirm-size-container > div > span:first-child {
+  border-bottom: 1px solid #000;
+}
+
+.variation-confirm-color-div {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.variation-confirm-size-container {
+  display: flex;
+  margin-top: 12px;
+  justify-content: space-around;
+  border-bottom: 2px solid #80ed99;
+
+}
+
+.variation-confirm-size-container > div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.variation-confirm-images-container {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 
+.bar-page-create-form {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+}
 
-/* To Do */
+.bar-page-create-form-inactive, .bar-page-create-form-active {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 
-/* .variation-confirm-data > div {
-  
-} */
+  border-radius: 100px;
+  background-color: #22577A;
+  color: #fff;
+}
+
+.bar-page-create-form-active {
+  background-color: #80ed99;
+}
+
+.confirm-product-form-container {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.one-span-info-container{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.one-span-info-container span:first-child {
+  border-bottom: 1px solid #000;
+  text-align: center;
+  width: 130px;
+}
+
+
+.confirm-product-two-info-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.features-confirm-product-container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.features-confirm-product-container > span, .description-confirm-product-container > span {
+  border-bottom: 1px solid #000;
+}
+
+.features-confirm-product-container > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.description-confirm-product-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.description-confirm-product-container > div {
+  width: 100%;
+  max-height: 120px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.list-features-confirm-product {
+  padding: 20px;
+}
+
+.size-confirm-product-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.size-confirm-product-container > span, .images-confirm-product-container > span {
+  border-bottom: 1px solid #000;
+}
+
+.size-confirm-product-container > div {
+  border-bottom: 1px solid #80ed99;
+}
+
+.one-span-info-container > span {
+  text-align: center;
+}
+
+.images-confirm-product-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.images-confirm-product-container > div {
+  overflow: auto;
+  max-height: 170px;
+  display: flex;
+  gap: 12px;
+}
+
+.images-confirm-product-container > div > img {
+  width: 150px;
+}

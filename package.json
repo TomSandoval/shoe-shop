@@ -9,18 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "@reduxjs/toolkit": "^1.9.5",
     "@uidotdev/usehooks": "^2.0.1",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.0",
     "debug": "^4.3.4",
+    "eslint": "^8.48.0",
+    "eslint-config-next": "^13.4.19",
+    "jose": "^4.14.4",
     "mongoose": "6.11.1",
     "mongoose-paginate-v2": "^1.7.31",
     "next": "13.4.7",
     "next-auth": "^4.22.3",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-redux": "^8.1.2",
     "supports-color": "^8.1.1",
-    "three": "^0.154.0"
+    "sweetalert2": "^11.7.27",
+    "three": "^0.154.0",
+    "universal-cookie": "^6.1.0"
   }
 }

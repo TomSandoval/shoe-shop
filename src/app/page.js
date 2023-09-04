@@ -1,15 +1,29 @@
 "use client";
 import Link from "next/link";
 import "./page.css";
-import { shoes } from "@/Utils/shoes";
 import HomeCards from "@/components/HomeCards/homeCards";
 import { useEffect, useState } from "react";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import Shoe3D from "@/components/shoe3D/shoe3D";
 import CardShop from "@/components/CardsShop/CardShop";
+import axios from "axios";
 
 export default function page() {
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const [shoes, setShoes] = useState();
+
+  const getData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/products");
+      setShoes(response.data.docs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -43,40 +57,42 @@ export default function page() {
               </div>
             </div>
           </div>
-          { width > 800 &&
+          {width > 800 && (
             <div className="image-container">
-              <Shoe3D/>
+              <Shoe3D />
             </div>
-          }
+          )}
         </div>
         {width >= 1460 ? (
           <div className="cards-home-container">
-            {shoes.slice(0, 5).map((shoe) => {
+            {shoes?.slice(0, 5).map((shoe) => {
               return (
                 <CardShop
-                  id={shoe.id}
+                  id={shoe._id}
                   name={shoe.name}
-                  price={shoe.original_price}
+                  price={shoe.discount_price || shoe.original_price}
                   brand={shoe.brand}
-                  img={shoe.images[0] || shoe.variations[0].images[0]}
+                  img={shoe.variations[0]?.images[0] || shoe.images[0]}
                   backgroundColor={shoe.background_card}
-                  key={shoe.id}
+                  variations={shoe.variations.length}
+                  key={shoe._id}
                 />
               );
             })}
           </div>
         ) : (
           <div className="cards-home-container">
-            {shoes.slice(0, 4).map((shoe) => {
+            {shoes?.slice(0, 4).map((shoe) => {
               return (
                 <CardShop
-                  id={shoe.id}
+                  id={shoe._id}
                   name={shoe.name}
                   price={shoe.price}
-                  img={shoe.images[0] || shoe.variations[0].images[0]}
+                  img={ shoe.variations[0]?.images[0] || shoe.images[0]}
                   backgroundColor={shoe.background_card}
+                  variations={shoe.variations.length}
                   brand={shoe.brand}
-                  key={shoe.id}
+                  key={shoe._id}
                 />
               );
             })}
