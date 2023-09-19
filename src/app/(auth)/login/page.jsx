@@ -116,7 +116,7 @@ export default function Login() {
           </button>
         </div>
       </div>
-      {width > 800 && (
+      {width > 1200 && (
         <div className="right-section-login">
           <h2>Days can't start with out perfect shoes</h2>
           <img src={img.src} alt="shoe-login" />

@@ -9,9 +9,10 @@ import Footer from "@/components/Footer/footer";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import axios from "axios";
 import { Poppins } from "next/font/google";
-import { useDispatch, useSelector } from "react-redux";
-import { add } from "@/redux/cartslice";
 import { toast } from "react-hot-toast";
+import { useCart } from "@/context/CartContext";
+import _ from "lodash";
+import CardShop from "@/components/CardsShop/CardShop";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
@@ -20,13 +21,13 @@ export default function Detail({ params }) {
 
   const { width, height } = useWindowDimensions();
 
-  const cartItems = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
   const [shoe, setShoe] = useState();
+  const [allShoes, setAllShoes] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [colorSelected, setColorSelected] = useState(null);
   const [sizeSelected, setSizeSelected] = useState(null);
   const [Instock, setStock] = useState(null);
+  const { cartItems, addProduct, setCart } = useCart();
 
   useEffect(() => {
     const getData = async (id) => {
@@ -58,7 +59,18 @@ export default function Detail({ params }) {
       }
     };
 
+    const getProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/products");
+
+        setAllShoes(response.data.docs);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getData(idProduct);
+    getProducts();
   }, []);
 
   useEffect(() => {
@@ -76,59 +88,145 @@ export default function Detail({ params }) {
   }, [sizeSelected, colorSelected, shoe]);
 
   if (!shoe) {
-    return <h1>Loading...</h1>;
+    return (
+      <main className="detail-preload-all-container">
+        <div className="left-panel-preload">
+          <div className="image-panel-preload"></div>
+          <div className="description-panel-preload">
+            <div className="description-preload-title"></div>
+            <div className="description-preload-text"></div>
+          </div>
+        </div>
+        <div className="right-panel-preload">
+          <div>
+            <div className="title-product-preload"></div>
+          </div>
+          <div className="variations-product-preload"></div>
+          <div className="variations-product-preload"></div>
+          <div className="variations-product-preload"></div>
+          <div className="buttons-container-preload">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   const handleAddCart = (product) => {
-    let sizeStock;
-    let productsInCart;
-    const data = {
-      sizeSelected: sizeSelected,
-      colorSelected: colorSelected,
-      product: product,
+    let data = {
+      sizeSelected,
+      colorSelected,
+      product,
+      total: 1,
     };
 
-    
+    const productEqualWithTotal = cartItems.find((item) =>
+      _.isEqual(item, data)
+    );
 
-    if (!product.have_variations) {
-      sizeStock = product.size.find((s) => s.size == sizeSelected);
-      const thisProductInCart = cartItems.filter((i) => i.product === product && i.sizeSelected == sizeSelected);
-
-      if (!thisProductInCart.length) {
-        dispatch(add(data));
-        toast.success(`${product.name} added to cart`);
-        return;
-      } else {
-        productsInCart = thisProductInCart
-      }
-    } else {
-      const thisProductInCart = cartItems.filter(
-        (i) =>
-          i.product === product &&
-          i.sizeSelected == sizeSelected &&
-          i.colorSelected == colorSelected
+    if (productEqualWithTotal) {
+      const indexProductInCart = cartItems.findIndex((item) =>
+        _.isEqual(item, data)
       );
 
-      if (!thisProductInCart.length) {
-        dispatch(add(data));
-        toast.success(`${product.name} added to cart`);
-        return;
-      } else {
-        const variationSelected = product.variations.find(
-          (v) => v.name == colorSelected
+      if (!product.have_variations) {
+        const sizeStock = product.size.find(
+          (size) => size.size == sizeSelected
         );
 
-        sizeStock = variationSelected.size.find((s) => s.size == sizeSelected);
-        productsInCart = thisProductInCart;
+        if (sizeStock.stock >= 2) {
+          const cartCopy = [...cartItems];
+          cartCopy[indexProductInCart].total = 2;
+          setCart(cartCopy);
+          toast.success(`Product added to cart`);
+          return;
+        } else {
+          toast.error("No more stock");
+          return;
+        }
+      } else {
+        const variationMatch = product.variations.find(
+          (variation) => variation.name == colorSelected
+        );
+
+        const sizeStock = variationMatch.size.find(
+          (size) => size.size == sizeSelected
+        );
+
+        if (sizeStock.stock >= 2) {
+          const cartCopy = [...cartItems];
+          cartCopy[indexProductInCart].total = 2;
+          setCart(cartCopy);
+          toast.success(`Product added to cart`);
+          return;
+        } else {
+          toast.error("No more stock");
+          return;
+        }
+      }
+    } else {
+      const productEqual = cartItems.find(
+        (item) =>
+          item.sizeSelected == sizeSelected &&
+          item.colorSelected == colorSelected &&
+          _.isEqual(item.product, product)
+      );
+
+      if (productEqual) {
+        const totalProduct = productEqual.total;
+
+        const indexProductInCart = cartItems.findIndex(
+          (item) =>
+            item.sizeSelected == sizeSelected &&
+            item.colorSelected == colorSelected &&
+            _.isEqual(item.product, product)
+        );
+
+        if (!product.have_variations) {
+          const sizeStock = product.size.find(
+            (size) => size.size == sizeSelected
+          );
+
+          if (sizeStock.stock > totalProduct) {
+            const cartCopy = [...cartItems];
+            cartCopy[indexProductInCart].total =
+              cartCopy[indexProductInCart].total + 1;
+
+            setCart(cartCopy);
+            toast.success(`Product added to cart`);
+            return;
+          } else {
+            toast.error("No more stock");
+            return;
+          }
+        } else {
+          const variationMatch = product.variations.find(
+            (variation) => variation.name == colorSelected
+          );
+
+          const sizeStock = variationMatch.size.find(
+            (size) => size.size == sizeSelected
+          );
+
+          if (sizeStock.stock > totalProduct) {
+            const cartCopy = [...cartItems];
+            cartCopy[indexProductInCart].total =
+              cartCopy[indexProductInCart].total + 1;
+            setCart(cartCopy);
+            toast.success(`Product added to cart`);
+            return;
+          } else {
+            toast.error("No more stock");
+            return;
+          }
+        }
       }
     }
 
-    if (productsInCart.length < sizeStock.stock) {
-      dispatch(add(data));
-      toast.success(`${product.name} added to cart`);
-    } else {
-      toast.error("No more stock");
-    }
+    addProduct(data);
+    toast.success(`Product added to cart`);
+    return;
   };
 
   const handleColorSelected = (e) => {
@@ -176,7 +274,13 @@ export default function Detail({ params }) {
 
   const handlePrincipalImage = () => {
     if (!shoe.have_variations) {
-      return <img src={shoe.images[selectedImage]} alt={shoe.name} />;
+      return (
+        <img
+          className="selected-image"
+          src={shoe.images[selectedImage]}
+          alt={shoe.name}
+        />
+      );
     } else {
       if (colorSelected) {
         const variationFound = shoe.variations.find(
@@ -272,7 +376,7 @@ export default function Detail({ params }) {
             <div className="detail-image-options">{handleOptionsImage()}</div>
             {handlePrincipalImage()}
           </div>
-          {width <= 800 && (
+          {width <= 1200 && (
             <div className="detail-principal-information-box">
               <div className="name-product-container">
                 <h1 className="name-product">{shoe.name}</h1>
@@ -283,18 +387,15 @@ export default function Detail({ params }) {
                   <h4>Colour: {colorSelected}</h4>
                   <div className="options-color-container">
                     {shoe.have_variations ? (
-                      shoe.variations.map(
-                        (v, index) =>
-                          v.in_stock && (
-                            <div
-                              onClick={(e) => handleColorSelected(e)}
-                              value={v.name}
-                              key={index}
-                              style={{ backgroundColor: v.color }}
-                              className="product-color-options"
-                            ></div>
-                          )
-                      )
+                      shoe.variations.map((v, index) => (
+                        <div
+                          onClick={(e) => handleColorSelected(e)}
+                          value={v.name}
+                          key={index}
+                          style={{ backgroundColor: v.color }}
+                          className="product-color-options"
+                        ></div>
+                      ))
                     ) : (
                       <div
                         style={{ backgroundColor: shoe.color.color }}
@@ -434,7 +535,7 @@ export default function Detail({ params }) {
             </p>
           </div>
         </div>
-        {width > 800 && (
+        {width > 1200 && (
           <div className="right-detail-product-information">
             <div className="detail-principal-information-box">
               <div className="name-product-container">
@@ -446,18 +547,15 @@ export default function Detail({ params }) {
                   <h4>Colour: {colorSelected}</h4>
                   <div className="options-color-container">
                     {shoe.have_variations === true ? (
-                      shoe.variations.map(
-                        (v, index) =>
-                          v.in_stock && (
-                            <div
-                              onClick={(e) => handleColorSelected(e)}
-                              value={v.name}
-                              key={index}
-                              style={{ backgroundColor: v.color }}
-                              className="product-color-options"
-                            ></div>
-                          )
-                      )
+                      shoe.variations.map((v, index) => (
+                        <div
+                          onClick={(e) => handleColorSelected(e)}
+                          value={v.name}
+                          key={index}
+                          style={{ backgroundColor: v.color }}
+                          className="product-color-options"
+                        ></div>
+                      ))
                     ) : (
                       <div
                         style={{ backgroundColor: shoe.color.color }}
@@ -523,7 +621,8 @@ export default function Detail({ params }) {
                       <path d="M21 7H7.334L6.18 4.23A1.995 1.995 0 0 0 4.333 3H2v2h2.334l4.743 11.385c.155.372.52.615.923.615h8c.417 0 .79-.259.937-.648l3-8A1.003 1.003 0 0 0 21 7zm-4 6h-2v2h-2v-2h-2v-2h2V9h2v2h2v2z"></path>
                     </svg>
                   </button>
-                  <button
+                  <Link
+                    href={`/buy?id=${idProduct}&colorSelected=${colorSelected}&sizeSelected=${sizeSelected}`}
                     className={
                       Instock
                         ? "information-box-buttons"
@@ -531,7 +630,7 @@ export default function Detail({ params }) {
                     }
                   >
                     Buy Now
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -542,16 +641,24 @@ export default function Detail({ params }) {
         <h2 className="products-on-sale-section-title">You may also like</h2>
         <div className="detail-hr"></div>
         <div className="cards-on-sale-container">
-          {shoes.slice(0, 6).map((s, index) => (
-            <DiscountCards
-              key={index}
-              image={s.imageURL || s.images[0]}
-              name={s.name}
-              discountPrice={s.discount_price}
-              originalPrice={s.original_price}
-              id={s.id}
-            />
-          ))}
+          {allShoes
+            .filter((s) => !_.isEqual(s, shoe))
+            .slice(0, 9)
+            .map((s, index) => (
+              <CardShop
+                key={index}
+                img={s.variations[0]?.images[0] || s.images[0]}
+                name={s.name}
+                brand={s.brand}
+                price={s.discount_price || s.original_price}
+                variations={s.variations.length}
+                discountPrice={s.discount_price}
+                originalPrice={s.original_price}
+                in_discount={s.in_discount}
+                id={s._id}
+                backgroundColor={s.background_card}
+              />
+            ))}
         </div>
       </section>
       <Footer />

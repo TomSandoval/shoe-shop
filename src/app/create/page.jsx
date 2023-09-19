@@ -13,9 +13,16 @@ import { useSession } from "next-auth/react";
 
 export default function CreateProduct() {
   const session = useSession();
+  const router = useRouter();
+
+  // if (
+  //   session.status === "unauthenticated" ||
+  //   session.data?.user.roll !== "ADMIN"
+  // ) {
+  //   router.push("/");
+  // }
   const inputRef = useRef(null);
   const simpleInput = useRef(null);
-  const router = useRouter();
   const [formProduct, setFormProduct] = useState({
     name: "",
     brand: "",
@@ -51,13 +58,6 @@ export default function CreateProduct() {
     stock: "",
   });
   const [features, setFeatures] = useState("");
-
-
-  useEffect(()=>{
-    if (session.data?.user?.email !== "admin@email.com") {
-      router.push("/")
-    }
-  },[session])
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -302,8 +302,6 @@ export default function CreateProduct() {
     const newVariationArray = formProduct.variations.filter(
       (_, i) => i !== index
     );
-
-  
 
     setFormProduct({
       ...formProduct,
@@ -1111,19 +1109,20 @@ export default function CreateProduct() {
 
   const handleSubmit = async () => {
     const formToJson = JSON.stringify(formProduct);
+    if (session.data.user.roll === "ADMIN") {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/products",
+          formToJson
+        );
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/products",
-        formToJson
-      );
-
-      if (response.status === 200) {
-        toast.success("Product created!");
-        router.push("/");
+        if (response.status === 200) {
+          toast.success("Product created!");
+          router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -1131,7 +1130,7 @@ export default function CreateProduct() {
     <main className={`create-all-container ${poppins.className}`}>
       <div className="box-create-container">
         <div className="card-create-box">
-          <CardCreate data={formProduct}/>
+          <CardCreate data={formProduct} />
         </div>
         <div className="form-create-box">
           <div className="bar-page-create-form">

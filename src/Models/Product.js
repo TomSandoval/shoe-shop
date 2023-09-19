@@ -26,7 +26,6 @@ const shoeSchema = new mongoose.Schema({
   category: {type: String, required: true},
   description: {type: String, required: true},
   in_stock: {type: Boolean, required: true},
-  stock: {type: Number, required: false, default: null},
   images: {type: [String], required: false},
   in_discount: {type: Boolean, required: false},
   original_price: {type: Number, required: true},

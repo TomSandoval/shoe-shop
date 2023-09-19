@@ -1,13 +1,13 @@
 import Shoe from "@/Models/Product";
 import connect from "@/Utils/db";
 
-export const checkStock = async (id, buyWithVariation) => {
+export const checkStock = async (id) => {
   await connect();
 
   const shoe = await Shoe.findById(id);
 
 
-  if (buyWithVariation) {
+  if (shoe.have_variations === true) {
     let sizeInStock = [];
 
     shoe?.variations.forEach((v) => {

@@ -21,7 +21,6 @@
 .sale-text {
   width: 500px;
   font-size: 2.5em;
-  font-family: "Poppins Bold";
 }
 
 .sale-text span {
@@ -120,10 +119,10 @@
   max-width: 100vw;
   width: 100%;
   border-bottom: 1px solid #000;
-
 }
 
-.filters-panel-shop, .filters-panel-shop-active {
+.filters-panel-shop,
+.filters-panel-shop-active {
   width: 350px;
   border-right: 1px solid #000;
   display: flex;
@@ -134,7 +133,8 @@
   padding-bottom: 20px;
 }
 
-.filters-panel-shop .sticky-panel-filter, .filters-panel-shop-active .sticky-panel-filter {
+.filters-panel-shop .sticky-panel-filter,
+.filters-panel-shop-active .sticky-panel-filter {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -145,15 +145,18 @@
   top: 90px;
 }
 
-
-.category-filters-shop,.price-filter-shop, .variations-filter-shop {
+.category-filters-shop,
+.price-filter-shop,
+.variations-filter-shop {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.category-filters-shop h3, .price-filter-shop h3, .variations-filter-shop h3 {
+.category-filters-shop h3,
+.price-filter-shop h3,
+.variations-filter-shop h3 {
   font-family: "Sansation Bold";
   font-size: 2em;
   margin-bottom: 26px;
@@ -178,7 +181,7 @@
 }
 
 .filter-price-inputs {
-  width: 60px;
+  width: 90px;
   padding: 8px 12px;
   text-align: center;
   outline: none;
@@ -203,21 +206,18 @@
   background-color: #ddd;
 }
 
-
-
-
 .variations-colors-container-shop {
-    display: flex;
-    width: 120px;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  width: 120px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.variations-colors-container-shop div {
-    border-radius: 10px;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+.variations-colors-container-shop > a {
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .products-panel-shop {
@@ -235,13 +235,21 @@
   grid-column-gap: 100px;
   grid-row-gap: 70px;
   padding: 15px;
+}
+
+.filter-panel-clear-filter {
+  font-size: 1.8em;
+  color: #000;
+  font-family: 'Sansation Bold';
+  text-decoration: underline;
+}
+
+.filters-options-container > select {
+  font-size: 1.2em;
 
 }
 
-
-
-@media only screen and (max-width: 800px) {
-
+@media only screen and (max-width: 1200px) {
   .sale-container {
     height: 400px;
   }
@@ -290,13 +298,14 @@
     grid-column-gap: 15px;
     grid-row-gap: 50px;
     padding: 0;
+    justify-items: center;
     padding-top: 20px;
     max-width: 100vw;
     width: 100%;
   }
 
-
-  .filters-panel-shop, .filters-panel-shop-active {
+  .filters-panel-shop,
+  .filters-panel-shop-active {
     max-width: 100vw;
     width: 100%;
     border: none;
@@ -305,16 +314,17 @@
     background-color: #fff;
     z-index: 100;
     right: 200%;
-    transition: .3s;
+    transition: 0.3s;
   }
-  
+
   .filters-panel-shop-active {
-    transition: .3s;
+    transition: 0.3s;
     right: 0;
     top: 0;
   }
 
-  .filters-panel-shop .sticky-panel-filter, .filters-panel-shop-active .sticky-panel-filter {
+  .filters-panel-shop .sticky-panel-filter,
+  .filters-panel-shop-active .sticky-panel-filter {
     position: fixed;
     background-color: #f6f6f6;
     height: 100%;
@@ -341,13 +351,45 @@
   }
 }
 
-
-
-
-@font-face {
-  font-family: "Poppins Bold";
-  src: url(../../../public/fonts/Poppins-Bold.ttf);
+.shop-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
+
+.shop-card-skeleton-image {
+  width: 280px;
+  height: 270px;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  background-size: 200% 100%;
+  animation: 0.8s shine linear infinite;
+  border-radius: 15px;
+}
+
+.shop-card-skeleton-info-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.shop-card-skeleton-name,
+.shop-card-skeleton-price {
+  width: 45%;
+  height: 20px;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  background-size: 200% 100%;
+  animation: 0.8s shine linear infinite;
+  border-radius: 6px;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
 
 @font-face {
   font-family: "Sansation Bold";

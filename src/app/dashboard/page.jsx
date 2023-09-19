@@ -26,9 +26,11 @@ export default function Dashboard() {
   const [optionSelected, setOptionSelected] = useState("dashboard");
   const [allProducts, setAllProducts] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [nameProduct, setNameProduct] = useState();
   const [userEmail, setUserEmail] = useState();
   const [productSelect, setProductSelect] = useState();
+  const [orderSelect, setOrderSelect] = useState();
   const [sizePrototypeVariation, setsizePrototypeVariation] = useState([]);
   const [feature, setFeature] = useState();
   const [variationPrototype, setVariationPrototype] = useState({
@@ -65,9 +67,22 @@ export default function Dashboard() {
     }
   };
 
+  const getOrders = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/dashboard/orders"
+      );
+
+      setAllOrders(response.data);
+    } catch (error) {
+      console.error(error, "Error to get orders");
+    }
+  };
+
   useEffect(() => {
     getProducts();
     getUsers();
+    getOrders();
   }, []);
 
   ChartJS.register(
@@ -699,6 +714,7 @@ export default function Dashboard() {
             <div className="dashboard-form-product-one-input-container">
               <label htmlFor="original_price">Price</label>
               <input
+                onChange={handleChangeSimple}
                 value={productSelect.original_price}
                 type="number"
                 name="original_price"
@@ -1361,6 +1377,45 @@ export default function Dashboard() {
     }
   };
 
+  const handleOrderProducts = (productDetail, index) => {
+    let variationFound;
+
+    if (productDetail.product.have_variations === true) {
+      variationFound = productDetail.product.variations.find(
+        (variation) => variation.name === productDetail.colorSelected
+      );
+    }
+
+    return (
+      <div className="order-product-card" key={index}>
+        <div className="order-product-card-image-container">
+          <img
+            src={
+              productDetail.product.have_variations
+                ? variationFound.images[0]
+                : productDetail.product.images[0]
+            }
+            alt={productDetail.product.name}
+          />
+        </div>
+        <div>
+          <h4 className="order-product-card-title">{productDetail.product.name}</h4>
+        </div>
+        <div>
+          <span className="order-product-card-price">
+            Price: $
+            {productDetail.product.discount_price ||
+              productDetail.product.original_price}
+          </span>
+        </div>
+        <div className="order-product-card-options-container">
+          <span>Size selected: {productDetail.sizeSelected}</span>
+          <span>Color Selected: {productDetail.colorSelected}</span>
+        </div>
+      </div>
+    );
+  };
+
   const handleName = (e) => {
     setNameProduct(e.target.value);
   };
@@ -1436,6 +1491,128 @@ export default function Dashboard() {
           </section>
         );
       }
+      case "orders": {
+        return (
+          <section className={`section-orders ${poppins.className}`}>
+            {orderSelect ? (
+              <>
+                <div className="order-general-information-container">
+                  <div className="order-user-information-container">
+                    <h3>User information</h3>
+                    <div className="order-user-information-data-container">
+                      <div>
+                        <span className="order-user-information-data-title">
+                          User email
+                        </span>
+                        <span>{orderSelect.userEmail}</span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          State
+                        </span>
+                        <span>{orderSelect.address.state}</span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          City
+                        </span>
+                        <span>{orderSelect.address.city}</span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          Postal code
+                        </span>
+                        <span>{orderSelect.address.postalCode}</span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          Street
+                        </span>
+                        <span>{orderSelect.address.street}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="order-select-information-container">
+                    <h3>Order information</h3>
+                    <div className="order-information-data-container">
+                      <div>
+                        <span className="order-user-information-data-title">
+                          Products total
+                        </span>
+                        <span>{orderSelect.products.length}</span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          Order state
+                        </span>
+                        <span>
+                          {orderSelect.pending === true
+                            ? "Pending"
+                            : "Complete"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          In shipping
+                        </span>
+                        <span>
+                          {orderSelect.in_shipping === true ? "True" : "False"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="order-user-information-data-title">
+                          Date of purchase
+                        </span>
+                        <span>{orderSelect.date}</span>
+                      </div>
+                      <div>
+                        <button>Send Product</button>
+                        <button>Complete purchase</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="order-select-products-container">
+                  <h3>Products</h3>
+                  <div className="order-select-products-map-container">
+                    {orderSelect.products.map((productDetail, index) => {
+                      return handleOrderProducts(productDetail, index);
+                    })}
+                  </div>
+                </div>
+              </>
+            ) : (
+              allOrders.map((order, index) => {
+                return (
+                  <div className="order-card-container" key={index}>
+                    <div className="order-card-svg-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="200"
+                        height="200"
+                        viewBox="0 0 24 24"
+                        style={{ fill: "rgba(0, 0, 0, 1)" }}
+                      >
+                        <path d="M21.993 7.95a.96.96 0 0 0-.029-.214c-.007-.025-.021-.049-.03-.074-.021-.057-.04-.113-.07-.165-.016-.027-.038-.049-.057-.075-.032-.045-.063-.091-.102-.13-.023-.022-.053-.04-.078-.061-.039-.032-.075-.067-.12-.094-.004-.003-.009-.003-.014-.006l-.008-.006-8.979-4.99a1.002 1.002 0 0 0-.97-.001l-9.021 4.99c-.003.003-.006.007-.011.01l-.01.004c-.035.02-.061.049-.094.073-.036.027-.074.051-.106.082-.03.031-.053.067-.079.102-.027.035-.057.066-.079.104-.026.043-.04.092-.059.139-.014.033-.032.064-.041.1a.975.975 0 0 0-.029.21c-.001.017-.007.032-.007.05V16c0 .363.197.698.515.874l8.978 4.987.001.001.002.001.02.011c.043.024.09.037.135.054.032.013.063.03.097.039a1.013 1.013 0 0 0 .506 0c.033-.009.064-.026.097-.039.045-.017.092-.029.135-.054l.02-.011.002-.001.001-.001 8.978-4.987c.316-.176.513-.511.513-.874V7.998c0-.017-.006-.031-.007-.048zm-10.021 3.922L5.058 8.005 7.82 6.477l6.834 3.905-2.682 1.49zm.048-7.719L18.941 8l-2.244 1.247-6.83-3.903 2.153-1.191zM13 19.301l.002-5.679L16 11.944V15l2-1v-3.175l2-1.119v5.705l-7 3.89z"></path>
+                      </svg>
+                    </div>
+                    <div className="order-information-container">
+                      <h3>User: {order.userEmail}</h3>
+                      <div className="secondary-info-orders">
+                        <span>Total products: {order.products.length}</span>
+                        <span>Date of purchase: {order.date}</span>
+                      </div>
+                      <button onClick={() => setOrderSelect(order)}>
+                        Detail
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </section>
+        );
+      }
       default:
         break;
     }
@@ -1508,6 +1685,26 @@ export default function Dashboard() {
             </svg>
             <span onClick={handleOptions} value={"users"}>
               Users
+            </span>
+          </div>
+          <div
+            className={
+              optionSelected === "orders"
+                ? "dashboard-right-panel-active"
+                : "dashboard-right-panel-option-container"
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="34"
+              height="34"
+              viewBox="0 0 24 24"
+              style={{ fill: "rgba(0, 0, 0, 1)" }}
+            >
+              <path d="M21.993 7.95a.96.96 0 0 0-.029-.214c-.007-.025-.021-.049-.03-.074-.021-.057-.04-.113-.07-.165-.016-.027-.038-.049-.057-.075-.032-.045-.063-.091-.102-.13-.023-.022-.053-.04-.078-.061-.039-.032-.075-.067-.12-.094-.004-.003-.009-.003-.014-.006l-.008-.006-8.979-4.99a1.002 1.002 0 0 0-.97-.001l-9.021 4.99c-.003.003-.006.007-.011.01l-.01.004c-.035.02-.061.049-.094.073-.036.027-.074.051-.106.082-.03.031-.053.067-.079.102-.027.035-.057.066-.079.104-.026.043-.04.092-.059.139-.014.033-.032.064-.041.1a.975.975 0 0 0-.029.21c-.001.017-.007.032-.007.05V16c0 .363.197.698.515.874l8.978 4.987.001.001.002.001.02.011c.043.024.09.037.135.054.032.013.063.03.097.039a1.013 1.013 0 0 0 .506 0c.033-.009.064-.026.097-.039.045-.017.092-.029.135-.054l.02-.011.002-.001.001-.001 8.978-4.987c.316-.176.513-.511.513-.874V7.998c0-.017-.006-.031-.007-.048zm-10.021 3.922L5.058 8.005 7.82 6.477l6.834 3.905-2.682 1.49zm.048-7.719L18.941 8l-2.244 1.247-6.83-3.903 2.153-1.191zM13 19.301l.002-5.679L16 11.944V15l2-1v-3.175l2-1.119v5.705l-7 3.89z"></path>
+            </svg>
+            <span onClick={handleOptions} value={"orders"}>
+              Orders
             </span>
           </div>
         </div>

@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+
+.cart-all-container {
+  position: relative;
+  top: 80px;
+  max-width: 100vw;
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.cart-all-container > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+}
+
+.section-information-user,
+.section-cart-user, .section-cart-user-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f1f1f1;
+  border: 2px solid #ddd;
+  height: 85%;
+  width: 45%;
+  border-radius: 15px;
+  gap: 0px;
+  position: relative;
+}
+
+.section-cart-user-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.section-cart-user-center > span {
+  align-self: center;
+  font-size: 1.3em;
+}
+
+.section-cart-user {
+  justify-content: flex-start;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.total-amount-cart {
+    position: absolute;
+    font-size: 1.4em;
+    right: 0;
+    bottom: 0;
+}
+
+.section-information-user > h2 {
+    align-self: center;
+    position: absolute;
+    top: 30px;
+    font-size: 2.3em;
+    border-bottom: 2px solid #ddd;
+    width: 100%;
+    text-align: center;
+}
+
+.one-input-container-cart {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px;
+}
+
+.one-input-container-cart > label {
+  font-size: 1.2em;
+}
+
+.one-input-container-cart > input {
+  padding: 4px 6px;
+  font-size: 1.1em;
+  border-radius: 6px;
+  border: 1px solid #000;
+  outline: none;
+}
+
+.section-information-user > span {
+  align-self: center;
+  margin-top: 10px;
+  font-size: 1.3em;
+}
+
+.hr-cart {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.paypal-button-container {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  align-self: center;
+}
+
+
+.value-product-cart {
+  font-size: 1.2em;
+}
+
+@media only screen and (max-width: 1200px) {
+  .cart-all-container {
+    padding: 12px;
+    height: auto;
+  }
+  .cart-all-container > div {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-cart-user, .section-information-user, .section-cart-user-center {
+    width: 100%;
+    height: 700px;
+  }
+}

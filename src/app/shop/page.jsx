@@ -3,46 +3,216 @@
 import "./pageShop.css";
 import axios from "axios";
 import shoeSale from "../../../public/assets/Shoe-sale.png";
-import { shoes } from "@/Utils/shoes";
 import CardShop from "@/components/CardsShop/CardShop";
-import { getAllVariations } from "@/Utils/getAllVariations";
-import { getAllCategories } from "@/Utils/getAllCategories";
 import Link from "next/link";
 import Pagination from "@/components/Pagination/Pagination";
 import useWindowDimensions from "@/Hooks/UseWindowDimensions";
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer/footer";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Poppins } from "next/font/google";
+import { resolve } from "styled-jsx/css";
+
+const poppins = Poppins({ subsets: ["latin"], weight: "700" });
 
 export default function Shop() {
   const { width, height } = useWindowDimensions();
+  const router = useRouter();
   const [filterPanel, setFilterPanel] = useState(false);
   const [data, setData] = useState();
-
-  const variations = getAllVariations();
-  const categories = getAllCategories();
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
+  const color = searchParams.get("color");
+  const minPriceParams = searchParams.get("min");
+  const maxPriceParams = searchParams.get("max");
+  const order = searchParams.get("order");
+  const page = searchParams.get("page");
+  const searchValue = searchParams.get("search");
+  const [categories, setCategories] = useState([]);
+  const [variations, setVariations] = useState([]);
+  const [minPrice, setMinPrice] = useState(undefined);
+  const [maxPrice, setMaxPrice] = useState(undefined);
+  const [hasFilter, setHasFilter] = useState(false);
+  const [search, setSearch] = useState(undefined);
+  const arrayAux = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   const handlePanel = () => {
     setFilterPanel(!filterPanel);
   };
 
   useEffect(() => {
+    if (maxPriceParams || minPriceParams || category || order || color) {
+      setHasFilter(true);
+    } else {
+      setHasFilter(false);
+    }
+  }, [maxPriceParams, minPriceParams, category, order, color]);
+
+  useEffect(() => {
+    const getVariations = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/products/variations"
+        );
+
+        setVariations(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getCategories = async () => {
+      try {
+        const response = await axios.get("/api/products/categories");
+
+        setCategories(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     const getData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/products');
+        console.log(page);
+        const response = await axios.get(
+          `http://localhost:3000/api/products?page=${page}`
+        );
 
-        setData(response.data)
+        setData(response.data);
       } catch (error) {
         console.log(error);
       }
+    };
+
+    const getProductsCategory = async () => {
+      const response = await axios.get(
+        `http://localhost:3000/api/products?category=${category}`
+      );
+
+      setData(response.data);
+    };
+
+    const getproductsColor = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products?color=${color}`
+        );
+
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getProductsPrice = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products?min=${minPriceParams}&max=${maxPriceParams}`
+        );
+
+        console.log(response);
+
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getProductsSearch = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products?search=${searchValue}`
+        );
+
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getProductsOrder = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products?order=${order}`
+        );
+
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (
+      category ||
+      color ||
+      minPriceParams ||
+      maxPriceParams ||
+      order ||
+      searchValue
+    ) {
+      if (category) {
+        getProductsCategory();
+      } else if (color) {
+        getproductsColor();
+      } else if (minPriceParams || maxPriceParams) {
+        getProductsPrice();
+      } else if (order) {
+        getProductsOrder();
+      } else if (searchParams) {
+        getProductsSearch();
+      }
+    } else {
+      getData();
     }
 
-    getData()
-  }, []);
+    getVariations();
+    getCategories();
+  }, [
+    category,
+    color,
+    minPriceParams,
+    maxPriceParams,
+    order,
+    searchValue,
+    page,
+  ]);
+
+  const handleFilterPrice = () => {
+    router.push(`/shop?min=${minPrice || 0}&max=${maxPrice || 5000}`);
+  };
+
+  const handleEnterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (search) {
+        handleSearch();
+        setSearch("");
+      }
+    }
+  };
+
+  const handleChangeFilterPrice = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "min-price") {
+      setMinPrice(value);
+    } else {
+      setMaxPrice(value);
+    }
+  };
+
+  const handleChangeOrder = (e) => {
+    const { value } = e.target;
+
+    router.push(`/shop?order=${value}`);
+  };
+
+  const handleSearch = () => {
+    router.push(`/shop?search=${search}`);
+  };
 
   return (
     <main>
-      <div className="sale-container">
+      <div className={`sale-container ${poppins.className}`}>
         <div className="sale-information">
           <div
             style={{
@@ -72,7 +242,7 @@ export default function Shop() {
 
       <div className="nav-products-container">
         <div className="input-search-container">
-          <button>
+          <button onClick={handleSearch}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -85,6 +255,8 @@ export default function Shop() {
           </button>
 
           <input
+            onKeyDown={handleEnterKeyPress}
+            onChange={(e) => setSearch(e.target.value)}
             autoComplete="off"
             className="input-search"
             type="text"
@@ -92,15 +264,19 @@ export default function Shop() {
             placeholder="Search"
           />
         </div>
-        {width > 800 ? (
+        {width > 1200 ? (
           <div className="filters-options-container">
             <span>Sort By</span>
-            <select defaultValue={"default"} name="sort">
+            <select
+              onChange={handleChangeOrder}
+              defaultValue={"default"}
+              name="sort"
+            >
               <option value="default" disabled>
                 Select
               </option>
-              <option value="price-min">Price min - max</option>
-              <option value="price-max">Price max - min</option>
+              <option value="min-max">Price min - max</option>
+              <option value="max-min">Price max - min</option>
             </select>
           </div>
         ) : (
@@ -118,19 +294,20 @@ export default function Shop() {
           }
         >
           <div className="sticky-panel-filter">
-            {width <= 800 && (
+            {width <= 1200 && (
               <button className="button-filter-hide" onClick={handlePanel}>
-                X
+                Close panel
               </button>
             )}
             <div className="category-filters-shop">
               <h3>CATEGORIES</h3>
               <div>
-                {categories.map((c, index) => (
+                {categories?.map((c, index) => (
                   <Link
+                    onClick={() => setFilterPanel(false)}
                     key={index}
                     className="categories-link-filter"
-                    href={`/categories/${c}`}
+                    href={`/shop?category=${c}`}
                   >
                     {c}
                   </Link>
@@ -141,18 +318,25 @@ export default function Shop() {
               <h3>FILTER</h3>
               <div>
                 <input
+                  value={minPrice}
                   placeholder="Min"
                   className="filter-price-inputs"
                   type="number"
                   name="min-price"
+                  onChange={handleChangeFilterPrice}
                 />
                 <input
+                  value={maxPrice}
                   placeholder="Max"
                   className="filter-price-inputs"
                   type="number"
                   name="max-price"
+                  onChange={handleChangeFilterPrice}
                 />
-                <button className="filter-price-button">
+                <button
+                  onClick={handleFilterPrice}
+                  className="filter-price-button"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -168,30 +352,57 @@ export default function Shop() {
             <div className="variations-filter-shop">
               <h3>COLOURS</h3>
               <div className="variations-colors-container-shop">
-                {variations.map((c, index) => (
-                  <div key={index} style={{ backgroundColor: c.color }}></div>
+                {variations?.map((c, index) => (
+                  <Link
+                    onClick={() => setFilterPanel(false)}
+                    key={index}
+                    href={`/shop?color=${c.name}`}
+                    style={{ backgroundColor: c.color }}
+                  ></Link>
                 ))}
               </div>
             </div>
+            {hasFilter && (
+              <Link href={"/shop"} className="filter-panel-clear-filter">
+                Clear filter
+              </Link>
+            )}
           </div>
         </div>
         <div className="products-panel-shop">
           <div className="products-cards-container-shop">
-            {data?.docs?.slice(0, 9).map((s,index) => (
-              <CardShop
-                key={index}
-                width={width}
-                name={s.name}
-                img={s.images[0] || s.variations[0].images[0]}
-                brand={s.brand}
-                price={s.in_discount ? s.discount_price : s.original_price}
-                variations={s.variations.length}
-                backgroundColor={s.background_card}
-                id={s._id}
-              />
-            ))}
+            {data
+              ? data.docs.map((s, index) => (
+                  <CardShop
+                    key={index}
+                    width={width}
+                    name={s.name}
+                    img={s.images[0] || s.variations[0].images[0]}
+                    brand={s.brand}
+                    in_discount={s.in_discount}
+                    price={s.in_discount ? s.discount_price : s.original_price}
+                    variations={s.variations.length}
+                    backgroundColor={s.background_card}
+                    id={s._id}
+                  />
+                ))
+              : arrayAux.map((item) => {
+                  return (
+                    <div className="shop-card-skeleton" key={item}>
+                      <div className="shop-card-skeleton-image"></div>
+                      <div className="shop-card-skeleton-info-container">
+                        <div className="shop-card-skeleton-name"></div>
+                        <div className="shop-card-skeleton-price"></div>
+                      </div>
+                    </div>
+                  );
+                })}
           </div>
-          <Pagination />
+          <Pagination
+            currentPage={data?.page}
+            hasNextPage={data?.hasNextPage}
+            hasPrevPage={data?.hasPrevPage}
+          />
         </div>
       </section>
       <Footer />
