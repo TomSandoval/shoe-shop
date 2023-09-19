@@ -1112,7 +1112,7 @@ export default function CreateProduct() {
     if (session.data.user.roll === "ADMIN") {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/products",
+          "https://shoe-shop-five.vercel.app/api/products",
           formToJson
         );
 

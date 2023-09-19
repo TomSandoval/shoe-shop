@@ -94,7 +94,7 @@ export default function Register() {
     } else {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/auth/register",
+          "https://shoe-shop-five.vercel.app/api/auth/register",
           JSON.stringify(formData)
         );
 

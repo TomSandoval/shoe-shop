@@ -46,7 +46,7 @@ export const POST = async (request) => {
       throw new Error(error);
     });
 
-    await fetch("http://localhost:3000/api/buy", {
+    await fetch("https://shoe-shop-five.vercel.app/api/buy", {
       method: "POST",
       body: JSON.stringify(dataProduct),
     });

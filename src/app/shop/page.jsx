@@ -52,7 +52,7 @@ export default function Shop() {
     const getVariations = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/products/variations"
+          "https://shoe-shop-five.vercel.app/api/products/variations"
         );
 
         setVariations(response.data);
@@ -75,7 +75,7 @@ export default function Shop() {
       try {
         console.log(page);
         const response = await axios.get(
-          `http://localhost:3000/api/products?page=${page}`
+          `https://shoe-shop-five.vercel.app/api/products?page=${page}`
         );
 
         setData(response.data);
@@ -86,7 +86,7 @@ export default function Shop() {
 
     const getProductsCategory = async () => {
       const response = await axios.get(
-        `http://localhost:3000/api/products?category=${category}`
+        `https://shoe-shop-five.vercel.app/api/products?category=${category}`
       );
 
       setData(response.data);
@@ -95,7 +95,7 @@ export default function Shop() {
     const getproductsColor = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products?color=${color}`
+          `https://shoe-shop-five.vercel.app/api/products?color=${color}`
         );
 
         setData(response.data);
@@ -107,7 +107,7 @@ export default function Shop() {
     const getProductsPrice = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products?min=${minPriceParams}&max=${maxPriceParams}`
+          `https://shoe-shop-five.vercel.app/api/products?min=${minPriceParams}&max=${maxPriceParams}`
         );
 
         console.log(response);
@@ -121,7 +121,7 @@ export default function Shop() {
     const getProductsSearch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products?search=${searchValue}`
+          `https://shoe-shop-five.vercel.app/api/products?search=${searchValue}`
         );
 
         setData(response.data);
@@ -133,7 +133,7 @@ export default function Shop() {
     const getProductsOrder = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products?order=${order}`
+          `https://shoe-shop-five.vercel.app/api/products?order=${order}`
         );
 
         setData(response.data);

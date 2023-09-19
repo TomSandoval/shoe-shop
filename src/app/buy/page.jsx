@@ -29,7 +29,7 @@ export default function Buy() {
     const getDataProduct = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products/${idProduct}`
+          `https://shoe-shop-five.vercel.app/api/products/${idProduct}`
         );
 
         setProductBuy(response.data);
@@ -154,7 +154,7 @@ export default function Buy() {
                     const order = await actions.order?.capture();
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/api/order",
+                        "https://shoe-shop-five.vercel.app/api/order",
                         {
                           product: productBuy,
                           email: email,

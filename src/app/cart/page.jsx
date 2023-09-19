@@ -387,7 +387,7 @@ export default function Cart() {
                     const order = await actions.order?.capture();
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/api/cart",
+                        "https://shoe-shop-five.vercel.app/api/cart",
                         {
                           cartItems,
                           totalCartAmount,

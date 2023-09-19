@@ -33,7 +33,7 @@ export default function Detail({ params }) {
     const getData = async (id) => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products/${id}`
+          `https://shoe-shop-five.vercel.app/api/products/${id}`
         );
 
         const data = response.data;
@@ -61,7 +61,7 @@ export default function Detail({ params }) {
 
     const getProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/products");
+        const response = await axios.get("https://shoe-shop-five.vercel.app/api/products");
 
         setAllShoes(response.data.docs);
       } catch (error) {

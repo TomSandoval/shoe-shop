@@ -20,7 +20,7 @@ export default function page() {
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/products");
+      const response = await axios.get("https://shoe-shop-five.vercel.app/api/products");
       setShoes(response.data.docs);
     } catch (error) {
       console.log(error);

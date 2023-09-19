@@ -36,7 +36,7 @@ export default function Header(props) {
   useEffect(()=> {
     const getCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/products/categories');
+        const response = await axios.get('https://shoe-shop-five.vercel.app/api/products/categories');
 
         setCategories(response.data)
       } catch (error) {

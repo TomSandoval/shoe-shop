@@ -47,7 +47,7 @@ export default function Dashboard() {
   const getProducts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/dashboard/products"
+        "https://shoe-shop-five.vercel.app/api/dashboard/products"
       );
       setAllProducts(response.data);
     } catch (error) {
@@ -58,7 +58,7 @@ export default function Dashboard() {
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/dashboard/users"
+        "https://shoe-shop-five.vercel.app/api/dashboard/users"
       );
 
       setAllUsers(response.data);
@@ -70,7 +70,7 @@ export default function Dashboard() {
   const getOrders = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/dashboard/orders"
+        "https://shoe-shop-five.vercel.app/api/dashboard/orders"
       );
 
       setAllOrders(response.data);
@@ -581,7 +581,7 @@ export default function Dashboard() {
     ) {
       try {
         const res = await axios.put(
-          `http://localhost:3000/api/products/${productSelect._id}`,
+          `https://shoe-shop-five.vercel.app/api/products/${productSelect._id}`,
           productSelect
         );
 
