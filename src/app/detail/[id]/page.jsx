@@ -16,21 +16,7 @@ import CardShop from "@/components/CardsShop/CardShop";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
-export async function generateMetadata({params,searchParams},parent) {
-
-  const id = params.id;
-
-  const product = await axios.get(`https://shoe-shop-five.vercel.app/api/products/${id}`);
-
-
-  return  {
-    title: product.data.title,
-    description: product.data.description
-  }
-}
-
-
-export default function Detail({ params, searchParams }) {
+export default function Detail({ params }) {
   const idProduct = params.id;
 
   const { width, height } = useWindowDimensions();
@@ -75,7 +61,9 @@ export default function Detail({ params, searchParams }) {
 
     const getProducts = async () => {
       try {
-        const response = await axios.get("https://shoe-shop-five.vercel.app/api/products");
+        const response = await axios.get(
+          "https://shoe-shop-five.vercel.app/api/products"
+        );
 
         setAllShoes(response.data.docs);
       } catch (error) {
@@ -124,7 +112,7 @@ export default function Detail({ params, searchParams }) {
           </div>
         </div>
       </main>
-    )
+    );
   }
 
   const handleAddCart = (product) => {
