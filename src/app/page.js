@@ -48,7 +48,7 @@ export default function page() {
                 <Link href={"/shop"} className="button-green">
                   Shop Now!
                 </Link>
-                <Link href={"/about"} className="button-learn-more">
+                <Link href={"#"} className="button-learn-more">
                   Learn More{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

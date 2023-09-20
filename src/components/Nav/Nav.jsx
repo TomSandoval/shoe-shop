@@ -417,6 +417,7 @@ export default function Header(props) {
               Total: ${totalAmountCart}
             </span>
             <Link
+              onClick={()=> setToggleCartMenu(false)}
               className={`button-buy-cart ${props.font.className}`}
               href={"/cart"}
             >
