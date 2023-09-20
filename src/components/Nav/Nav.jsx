@@ -270,7 +270,7 @@ export default function Header(props) {
               }
             </div>
           </div>
-          <Link className="link-button-nav" href={"/about"}>
+          <Link className="link-button-nav" href={"#"}>
             About
           </Link>
           <Link className="link-button-nav" href={"/shop"}>
@@ -381,7 +381,7 @@ export default function Header(props) {
             <Link className="link-button-nav" href={"/shop"}>
               Shop
             </Link>
-            <Link className="link-button-nav" href={"/about"}>
+            <Link className="link-button-nav" href={"#"}>
               About
             </Link>
             <Link className="link-button-nav" href={"/testimonial"}>
